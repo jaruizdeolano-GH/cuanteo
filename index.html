@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuanteo — calculadoras para decisiones reales</title>
+<meta name="description" content="Calculadoras y simuladores online para España: nómina, finiquito, hipoteca, luz, autónomos. Herramientas gratuitas que responden a la pregunta: ¿cuánto?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papel:#FAFAF7; --tinta:#1C2B36; --tinta-suave:#5A6B76;
+    --ambar:#E8A100; --verde:#2E6E63; --linea:#E3E2DC; --carta:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--papel);color:var(--tinta);
+    font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.55}
+  a{color:inherit}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+
+  header{padding:26px 0;display:flex;justify-content:space-between;align-items:baseline}
+  .marca{font-family:'Archivo';font-weight:900;font-size:1.35rem;letter-spacing:-.02em;text-decoration:none}
+  .marca span{color:var(--ambar)}
+  .tag{font-size:.8rem;color:var(--tinta-suave)}
+
+  .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;
+    align-items:center;padding:56px 0 72px}
+  h1{font-family:'Archivo';font-weight:900;font-stretch:80%;
+    font-size:clamp(2.6rem,6vw,4.4rem);line-height:1.02;letter-spacing:-.025em}
+  h1 .pregunta{color:var(--ambar)}
+  h1 .hueco{color:var(--verde);border-bottom:4px solid var(--linea);
+    display:inline-block;min-width:9ch}
+  .hero p{margin-top:22px;font-size:1.08rem;color:var(--tinta-suave);max-width:44ch}
+
+  .carta{background:var(--carta);border:1px solid var(--linea);border-radius:14px;
+    padding:26px;box-shadow:0 1px 2px rgba(28,43,54,.05)}
+  .tabs{display:flex;gap:6px;margin-bottom:20px}
+  .tab{font-size:.85rem;font-weight:600;padding:7px 14px;border-radius:999px;
+    border:1px solid var(--linea);background:transparent;cursor:pointer;color:var(--tinta-suave)}
+  .tab[aria-selected="true"]{background:var(--tinta);color:#fff;border-color:var(--tinta)}
+  .campo{margin-bottom:14px}
+  .campo label{display:block;font-size:.8rem;font-weight:600;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .campo input{width:100%;padding:11px 12px;font-size:1rem;font-family:inherit;
+    border:1px solid var(--linea);border-radius:9px;background:var(--papel)}
+  .campo input:focus{outline:2px solid var(--ambar);outline-offset:1px;border-color:var(--ambar)}
+  .resultado{margin-top:18px;padding:16px;border-radius:10px;background:var(--papel);
+    border:1px dashed var(--linea);font-size:.95rem;color:var(--tinta-suave)}
+  .resultado strong{display:block;font-family:'Archivo';font-weight:800;
+    font-size:1.7rem;color:var(--verde);font-variant-numeric:tabular-nums;margin-top:2px}
+
+  .seccion{padding:52px 0;border-top:1px solid var(--linea)}
+  .seccion h2{font-family:'Archivo';font-weight:800;font-size:1.5rem;
+    letter-spacing:-.01em;margin-bottom:8px}
+  .seccion .sub{color:var(--tinta-suave);margin-bottom:30px;max-width:60ch}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .tile{background:var(--carta);border:1px solid var(--linea);border-radius:12px;
+    padding:18px 18px 16px}
+  .tile .q{font-size:.78rem;font-weight:600;color:var(--ambar);
+    text-transform:uppercase;letter-spacing:.06em}
+  .tile h3{font-family:'Archivo';font-weight:700;font-size:1.02rem;margin:6px 0 4px}
+  .tile p{font-size:.85rem;color:var(--tinta-suave)}
+  .tile .pronto{display:inline-block;margin-top:10px;font-size:.72rem;font-weight:600;
+    color:var(--tinta-suave);border:1px solid var(--linea);border-radius:999px;padding:3px 9px}
+
+  footer{border-top:1px solid var(--linea);padding:34px 0 46px;
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    font-size:.85rem;color:var(--tinta-suave)}
+  footer a{color:var(--tinta)}
+
+  @media (max-width:820px){
+    .hero{grid-template-columns:1fr;gap:36px;padding:36px 0 52px}
+    .grid{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:540px){.grid{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){.hueco{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="marca" href="/">cuanteo<span>.</span></a>
+    <span class="tag">calculadoras para decisiones reales</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1><span class="pregunta">¿Cuánto</span><br>
+          <span class="hueco" id="hueco">me queda de sueldo?</span></h1>
+        <p>Herramientas de cálculo gratuitas para España: nómina, finiquito,
+          hipoteca, luz, autónomos. Sin registros, sin rodeos — el número que
+          necesitas para decidir.</p>
+      </div>
+
+      <div class="carta" aria-label="Calculadora">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" aria-selected="true" id="tab-pct"
+            onclick="cambia('pct')">Porcentajes</button>
+          <button class="tab" role="tab" aria-selected="false" id="tab-dias"
+            onclick="cambia('dias')">Días entre fechas</button>
+        </div>
+
+        <div id="panel-pct" role="tabpanel">
+          <div class="campo">
+            <label for="pct">Porcentaje (%)</label>
+            <input type="number" id="pct" value="21" inputmode="decimal">
+          </div>
+          <div class="campo">
+            <label for="base">Cantidad (€)</label>
+            <input type="number" id="base" value="1500" inputmode="decimal">
+          </div>
+          <div class="resultado" aria-live="polite">Resultado
+            <strong id="res-pct">315,00 €</strong></div>
+        </div>
+
+        <div id="panel-dias" role="tabpanel" hidden>
+          <div class="campo">
+            <label for="f1">Desde</label>
+            <input type="date" id="f1">
+          </div>
+          <div class="campo">
+            <label for="f2">Hasta</label>
+            <input type="date" id="f2">
+          </div>
+          <div class="resultado" aria-live="polite">Diferencia
+            <strong id="res-dias">—</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion">
+      <h2>En camino</h2>
+      <p class="sub">Cada herramienta responde a una pregunta concreta con datos
+        actualizados de fuentes oficiales. Estas son las primeras.</p>
+      <div class="grid">
+        <div class="tile"><span class="q">¿Cuánto cobro?</span>
+          <h3>Sueldo neto</h3>
+          <p>De bruto a neto con las tablas de IRPF y cotizaciones vigentes.</p>
+          <span class="pronto">próximamente</span></div>
+        <div class="tile"><span class="q">¿Cuánto me toca?</span>
+          <h3>Finiquito e indemnización</h3>
+          <p>Fin de contrato o despido: lo que te corresponde, paso a paso.</p>
+          <span class="pronto">próximamente</span></div>
+        <div class="tile"><span class="q">¿Cuánto subirá?</span>
+          <h3>Revisión de hipoteca (Euríbor)</h3>
+          <p>Tu nueva cuota con el Euríbor del mes, antes de que llegue la carta.</p>
+          <span class="pronto">próximamente</span></div>
+        <div class="tile"><span class="q">¿Cuánto cuesta hoy?</span>
+          <h3>Precio de la luz</h3>
+          <p>El precio de la electricidad hora a hora, actualizado a diario.</p>
+          <span class="pronto">próximamente</span></div>
+        <div class="tile"><span class="q">¿Cuánto pagaré?</span>
+          <h3>Cuota de autónomos</h3>
+          <p>Tu cuota por tramos de rendimiento según la normativa en vigor.</p>
+          <span class="pronto">próximamente</span></div>
+        <div class="tile"><span class="q">¿Cuánto me devuelven?</span>
+          <h3>Reclamaciones</h3>
+          <p>Vuelos retrasados, gastos de hipoteca: calcula lo reclamable.</p>
+          <span class="pronto">próximamente</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Cuanteo — herramientas de cálculo, hechas en España.</span>
+    <span>Contacto: <a href="mailto:hola@cuanteo.com">hola@cuanteo.com</a></span>
+  </footer>
+</div>
+
+<script>
+  // héroe: la pregunta se completa con nichos reales
+  const frases = ["me queda de sueldo?", "es mi finiquito?", "subirá mi hipoteca?",
+    "cuesta la luz hoy?", "pagaré de autónomos?", "puedo reclamar?"];
+  let i = 0;
+  const hueco = document.getElementById("hueco");
+  const rm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!rm) setInterval(() => {
+    i = (i + 1) % frases.length;
+    hueco.style.opacity = 0;
+    setTimeout(() => { hueco.textContent = frases[i]; hueco.style.opacity = 1; }, 220);
+  }, 2600);
+  hueco.style.transition = "opacity .22s";
+
+  // pestañas
+  function cambia(cual) {
+    for (const k of ["pct", "dias"]) {
+      document.getElementById("panel-" + k).hidden = (k !== cual);
+      document.getElementById("tab-" + k).setAttribute("aria-selected", k === cual);
+    }
+  }
+
+  // calculadora de porcentajes
+  const fmt = new Intl.NumberFormat("es-ES", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  function calcPct() {
+    const p = parseFloat(document.getElementById("pct").value);
+    const b = parseFloat(document.getElementById("base").value);
+    document.getElementById("res-pct").textContent =
+      (isFinite(p) && isFinite(b)) ? fmt.format(p * b / 100) + " €" : "—";
+  }
+  document.getElementById("pct").addEventListener("input", calcPct);
+  document.getElementById("base").addEventListener("input", calcPct);
+
+  // días entre fechas
+  function calcDias() {
+    const a = document.getElementById("f1").valueAsDate;
+    const b = document.getElementById("f2").valueAsDate;
+    const out = document.getElementById("res-dias");
+    if (!a || !b) { out.textContent = "—"; return; }
+    const d = Math.round((b - a) / 86400000);
+    out.textContent = Math.abs(d) + (Math.abs(d) === 1 ? " día" : " días");
+  }
+  document.getElementById("f1").addEventListener("input", calcDias);
+  document.getElementById("f2").addEventListener("input", calcDias);
+</script>
+</body>
+</html>
