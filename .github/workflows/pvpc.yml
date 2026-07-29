@@ -27,6 +27,9 @@ jobs:
           git config user.name "cuanteo-bot"
           git config user.email "hola@cuanteo.com"
           git add precio-luz/data.json
-          git diff --cached --quiet && echo "Sin cambios" && exit 0
-          git commit -m "PVPC: actualizacion automatica"
-          git push
+          if git diff --cached --quiet; then
+            echo "Sin cambios"
+          else
+            git commit -m "PVPC: actualizacion automatica"
+            git push
+          fi
