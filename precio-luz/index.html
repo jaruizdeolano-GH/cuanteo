@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precio de la luz hoy, hora a hora — PVPC actualizado | Cuanteo</title>
+<meta name="description" content="El precio de la luz (PVPC) hoy y mañana, hora a hora: precio actual, horas más baratas y más caras, y cuánto cuesta cada consumo. Datos oficiales de REE, actualizados a diario.">
+<link rel="canonical" href="https://cuanteo.com/precio-luz/">
+<meta property="og:title" content="Precio de la luz hoy — Cuanteo">
+<meta property="og:description" content="PVPC hora a hora: precio actual, horas baratas y caras. Datos de REE.">
+<meta property="og:url" content="https://cuanteo.com/precio-luz/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Precio de la luz hoy (PVPC)",
+      "url": "https://cuanteo.com/precio-luz/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+      "inLanguage": "es"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Qué es el PVPC?",
+          "acceptedAnswer": {"@type": "Answer", "text": "El Precio Voluntario para el Pequeño Consumidor es la tarifa regulada de electricidad en España. Su precio cambia cada hora según el mercado mayorista y lo publica Red Eléctrica cada día alrededor de las 20:15 para el día siguiente."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuáles son las horas más baratas de la luz?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Varía cada día con el mercado, pero de forma habitual las horas más baratas se concentran en la madrugada y en las horas centrales del día cuando hay mucha producción solar, y las más caras al anochecer (20:00–22:00)."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿El precio mostrado incluye impuestos?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Se muestra el término de facturación de energía del PVPC peninsular, que incluye peajes y cargos pero no el IVA ni el término fijo de potencia de tu factura."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuándo se publica el precio de mañana?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Red Eléctrica publica los precios del día siguiente cada día en torno a las 20:15 (hora peninsular). Esta página se actualiza automáticamente poco después."}
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Cuanteo", "item": "https://cuanteo.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Precio de la luz", "item": "https://cuanteo.com/precio-luz/"}
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --papel:#FAFAF7; --tinta:#1C2B36; --tinta-suave:#5A6B76;
+    --ambar:#E8A100; --verde:#2E6E63; --rojo:#C4553B;
+    --linea:#E3E2DC; --carta:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--papel);color:var(--tinta);
+    font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:baseline}
+  .marca{font-family:'Archivo';font-weight:900;font-size:1.25rem;
+    letter-spacing:-.02em;text-decoration:none}
+  .marca span{color:var(--ambar)}
+  nav a{font-size:.85rem;color:var(--tinta-suave);text-decoration:none}
+  h1{font-family:'Archivo';font-weight:900;font-stretch:85%;
+    font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.1;
+    letter-spacing:-.02em;margin:14px 0 8px}
+  .sub{color:var(--tinta-suave);max-width:58ch;margin-bottom:8px}
+  .fecha-act{font-size:.78rem;color:var(--tinta-suave);margin-bottom:22px}
+
+  .panel{background:var(--carta);border:1px solid var(--linea);
+    border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(28,43,54,.05);
+    margin-bottom:26px}
+  .ahora{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .ahora div span{display:block;font-size:.74rem;font-weight:600;
+    color:var(--tinta-suave)}
+  .ahora div strong{font-family:'Archivo';font-weight:800;
+    font-size:1.45rem;font-variant-numeric:tabular-nums;color:var(--tinta)}
+  .ahora .grande strong{font-size:1.9rem;color:var(--verde)}
+  .ahora .cara strong{color:var(--rojo)}
+  .ahora .barata strong{color:var(--verde)}
+
+  .tabs{display:flex;gap:6px;margin-bottom:16px}
+  .tabs button{font-size:.85rem;font-weight:600;padding:7px 14px;
+    border-radius:999px;border:1px solid var(--linea);background:transparent;
+    cursor:pointer;color:var(--tinta-suave);font-family:inherit}
+  .tabs button[aria-pressed="true"]{background:var(--tinta);color:#fff;
+    border-color:var(--tinta)}
+  .tabs button:disabled{opacity:.45;cursor:default}
+
+  .grafico{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;
+    align-items:end;height:150px;margin:6px 0 4px}
+  .grafico .barra{border-radius:3px 3px 0 0;min-height:6px;position:relative;
+    background:var(--ambar)}
+  .grafico .barra.b{background:var(--verde)}
+  .grafico .barra.c{background:var(--rojo)}
+  .grafico .barra.actual{outline:2px solid var(--tinta);outline-offset:1px}
+  .horas{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;
+    font-size:.58rem;color:var(--tinta-suave);text-align:center;
+    font-variant-numeric:tabular-nums;margin-bottom:14px}
+  .leyenda{display:flex;gap:16px;font-size:.75rem;color:var(--tinta-suave);
+    margin-bottom:4px}
+  .leyenda i{display:inline-block;width:9px;height:9px;border-radius:2px;
+    margin-right:5px}
+
+  .coste{display:grid;grid-template-columns:1fr 1fr;gap:16px;
+    align-items:end}
+  .coste label{display:block;font-size:.8rem;font-weight:600;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .coste input{width:100%;padding:12px;font-size:1.05rem;font-family:inherit;
+    border:1px solid var(--linea);border-radius:9px;background:var(--papel)}
+  .coste input:focus{outline:2px solid var(--ambar);outline-offset:1px}
+  .coste .out span{display:block;font-size:.74rem;font-weight:600;
+    color:var(--tinta-suave)}
+  .coste .out strong{font-family:'Archivo';font-weight:800;font-size:1.5rem;
+    color:var(--verde);font-variant-numeric:tabular-nums}
+  .coste .pista{font-size:.72rem;color:var(--tinta-suave);margin-top:4px}
+
+  .sin-datos{padding:14px;background:#FCF3DC;border-radius:8px;
+    font-size:.88rem;color:#8a5a00}
+  [hidden]{display:none !important}
+
+  article h2{font-family:'Archivo';font-weight:800;font-size:1.35rem;
+    letter-spacing:-.01em;margin:34px 0 10px}
+  article p{color:var(--tinta-suave);margin-bottom:14px;max-width:68ch}
+  .faq details{border-bottom:1px solid var(--linea);padding:14px 0}
+  .faq summary{font-weight:600;cursor:pointer}
+  .faq p{margin-top:8px}
+  .aviso{font-size:.8rem;color:var(--tinta-suave);border-left:3px solid
+    var(--linea);padding:8px 14px;margin:30px 0}
+  footer{border-top:1px solid var(--linea);margin-top:44px;
+    padding:28px 0 40px;display:flex;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;font-size:.82rem;color:var(--tinta-suave)}
+  @media (max-width:680px){
+    .ahora{grid-template-columns:1fr 1fr}
+    .coste{grid-template-columns:1fr}
+    .horas{font-size:.5rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="marca" href="/">cuanteo<span>.</span></a>
+    <nav><a href="/">todas las herramientas</a></nav>
+  </header>
+
+  <main>
+    <h1>Precio de la luz hoy</h1>
+    <p class="sub">El PVPC hora a hora con datos oficiales de Red Eléctrica:
+    precio actual, horas más baratas y más caras, y el de mañana en cuanto
+    se publica.</p>
+    <p class="fecha-act" id="act">Cargando datos…</p>
+
+    <div class="sin-datos" id="sin-datos" hidden>Los precios se actualizan
+    automáticamente varias veces al día. Si no ves datos de hoy, vuelve en
+    unos minutos.</div>
+
+    <div class="panel" id="panel-ahora" hidden>
+      <div class="ahora">
+        <div class="grande"><span id="lbl-ahora">Precio ahora</span>
+          <strong id="p-ahora">—</strong></div>
+        <div><span>Media del día</span><strong id="p-media">—</strong></div>
+        <div class="barata"><span>Hora más barata</span>
+          <strong id="p-min">—</strong></div>
+        <div class="cara"><span>Hora más cara</span>
+          <strong id="p-max">—</strong></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-grafico" hidden>
+      <div class="tabs">
+        <button type="button" id="t-hoy" aria-pressed="true"
+          onclick="setDia('hoy')">Hoy</button>
+        <button type="button" id="t-man" aria-pressed="false" disabled
+          onclick="setDia('man')">Mañana</button>
+      </div>
+      <div class="leyenda">
+        <span><i style="background:var(--verde)"></i>más barato</span>
+        <span><i style="background:var(--ambar)"></i>intermedio</span>
+        <span><i style="background:var(--rojo)"></i>más caro</span>
+      </div>
+      <div class="grafico" id="grafico" role="img"
+        aria-label="Precio de la luz por horas"></div>
+      <div class="horas" id="horas"></div>
+
+      <div class="coste">
+        <div>
+          <label for="kwh">¿Cuánto cuesta un consumo? (kWh)</label>
+          <input type="number" id="kwh" value="1" min="0" step="0.1"
+            inputmode="decimal">
+          <div class="pista">Lavadora ≈ 1 kWh · lavavajillas ≈ 1,2 ·
+            horno 1 h ≈ 1,5 · aire acond. 1 h ≈ 1</div>
+        </div>
+        <div class="out"><span>Al precio de ahora / mejor hora</span>
+          <strong id="coste-out">—</strong></div>
+      </div>
+    </div>
+
+    <article>
+      <h2>Cómo leer estos precios</h2>
+      <p>El PVPC (Precio Voluntario para el Pequeño Consumidor) es la tarifa
+      regulada: su precio cambia <strong>cada hora</strong> según el mercado
+      mayorista. Red Eléctrica publica los precios del día siguiente cada
+      tarde en torno a las 20:15, y esta página los incorpora automáticamente.
+      Se muestra el término de energía peninsular (con peajes y cargos, sin
+      IVA ni término de potencia).</p>
+      <p>Mover los consumos intensivos — lavadora, lavavajillas, carga del
+      coche — de la hora más cara a la más barata del día supone con
+      frecuencia pagar la mitad o menos por el mismo consumo. El patrón
+      habitual: precios bajos de madrugada y en las horas centrales con
+      producción solar alta, y máximos al anochecer.</p>
+
+      <h2>¿Tienes PVPC o mercado libre?</h2>
+      <p>Estos precios se aplican si tienes la tarifa regulada (PVPC),
+      disponible solo con comercializadoras de referencia. Si estás en
+      mercado libre, tu precio es el que fija tu contrato — aunque el PVPC
+      sigue siendo la referencia para saber si tu tarifa es competitiva.
+      Puedes comprobar cuál tienes en cualquier factura reciente.</p>
+
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        <details>
+          <summary>¿Por qué el precio de mi factura no coincide exactamente?</summary>
+          <p>La factura añade el IVA, el término fijo de potencia, el alquiler
+          del contador y, en su caso, otros conceptos. Aquí se muestra el
+          término de energía, que es la parte que varía hora a hora.</p>
+        </details>
+        <details>
+          <summary>¿Estos precios valen para Canarias, Baleares, Ceuta y Melilla?</summary>
+          <p>Se muestra el precio peninsular. Los sistemas no peninsulares
+          tienen sus propios valores, normalmente muy próximos.</p>
+        </details>
+        <details>
+          <summary>¿De dónde salen los datos?</summary>
+          <p>De la API pública de Red Eléctrica de España (REData). La página
+          se regenera automáticamente varias veces al día.</p>
+        </details>
+      </div>
+
+      <p class="aviso">Información orientativa con datos oficiales de REE.
+      No constituye asesoramiento sobre contratación de tarifas.</p>
+    </article>
+  </main>
+
+  <footer>
+    <span>© 2026 Cuanteo · Arlobi Consulting SLNE</span>
+    <span>
+      <a href="/aviso-legal/">Aviso legal</a> ·
+      <a href="/privacidad/">Privacidad</a> ·
+      <a href="/cookies/">Cookies</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const fmt = v => (v * 100).toFixed(2).replace(".", ",") + " cts/kWh";
+  const fmtEUR = v => v.toFixed(2).replace(".", ",") + " €";
+  let DATA = null, dia = "hoy", fHoy = null, fMan = null;
+
+  function madridDate(offsetDias = 0) {
+    const d = new Date(Date.now() + offsetDias * 86400000);
+    return new Intl.DateTimeFormat("en-CA",
+      {timeZone: "Europe/Madrid"}).format(d); // YYYY-MM-DD
+  }
+  function madridHour() {
+    return parseInt(new Intl.DateTimeFormat("es-ES",
+      {timeZone: "Europe/Madrid", hour: "numeric", hour12: false})
+      .format(new Date()), 10) % 24;
+  }
+
+  function setDia(cual) {
+    dia = cual;
+    $("t-hoy").setAttribute("aria-pressed", cual === "hoy");
+    $("t-man").setAttribute("aria-pressed", cual === "man");
+    render();
+  }
+
+  function render() {
+    const fecha = dia === "hoy" ? fHoy : fMan;
+    const precios = DATA.days[fecha];
+    if (!precios) return;
+    const h = madridHour();
+    const esHoy = dia === "hoy";
+    const min = Math.min(...precios), max = Math.max(...precios);
+    const media = precios.reduce((a, b) => a + b, 0) / 24;
+    const hMin = precios.indexOf(min), hMax = precios.indexOf(max);
+
+    $("lbl-ahora").textContent = esHoy ? "Precio ahora ("
+      + String(h).padStart(2, "0") + ":00)" : "Precio medio de mañana";
+    $("p-ahora").textContent = esHoy ? fmt(precios[h]) : fmt(media);
+    $("p-media").textContent = fmt(media);
+    $("p-min").textContent = fmt(min) + " · " + String(hMin).padStart(2, "0") + "h";
+    $("p-max").textContent = fmt(max) + " · " + String(hMax).padStart(2, "0") + "h";
+
+    // grafico
+    const g = $("grafico"), hs = $("horas");
+    g.innerHTML = ""; hs.innerHTML = "";
+    const rango = max - min || 1;
+    const t1 = min + rango / 3, t2 = min + 2 * rango / 3;
+    precios.forEach((p, i) => {
+      const b = document.createElement("div");
+      b.className = "barra " + (p <= t1 ? "b" : p >= t2 ? "c" : "");
+      if (esHoy && i === h) b.classList.add("actual");
+      b.style.height = (10 + 90 * (p - min) / rango) + "%";
+      b.title = String(i).padStart(2, "0") + ":00 — " + fmt(p);
+      g.appendChild(b);
+      const et = document.createElement("span");
+      et.textContent = i % 3 === 0 ? i : "";
+      hs.appendChild(et);
+    });
+    calcCoste();
+  }
+
+  function calcCoste() {
+    const fecha = dia === "hoy" ? fHoy : fMan;
+    const precios = DATA && DATA.days[fecha];
+    const kwh = parseFloat($("kwh").value);
+    if (!precios || !isFinite(kwh)) return;
+    const h = madridHour();
+    const min = Math.min(...precios);
+    const ahora = dia === "hoy" ? precios[h]
+      : precios.reduce((a, b) => a + b, 0) / 24;
+    $("coste-out").textContent =
+      fmtEUR(kwh * ahora) + " / " + fmtEUR(kwh * min);
+  }
+
+  fetch("data.json")
+    .then(r => r.json())
+    .then(d => {
+      DATA = d;
+      fHoy = madridDate(0);
+      fMan = madridDate(1);
+      const hayHoy = !!d.days[fHoy];
+      const hayMan = !!d.days[fMan];
+      // si no hay datos de hoy, ensenar el ultimo dia disponible como referencia
+      if (!hayHoy) {
+        const fechas = Object.keys(d.days).sort();
+        if (fechas.length) { fHoy = fechas[fechas.length - 1]; }
+      }
+      $("sin-datos").hidden = hayHoy || !!Object.keys(d.days).length === false
+        ? true : !Object.keys(d.days).length ? false : false;
+      $("sin-datos").hidden = hayHoy;
+      $("t-man").disabled = !hayMan;
+      $("panel-ahora").hidden = false;
+      $("panel-grafico").hidden = false;
+      const act = new Date(d.updated);
+      $("act").textContent = "Datos de REE · actualizado "
+        + act.toLocaleString("es-ES", {timeZone: "Europe/Madrid",
+            day: "numeric", month: "short", hour: "2-digit",
+            minute: "2-digit"})
+        + (hayHoy ? "" : " · mostrando el último día disponible");
+      render();
+    })
+    .catch(() => {
+      $("act").textContent = "";
+      $("sin-datos").hidden = false;
+    });
+
+  $("kwh").addEventListener("input", calcCoste);
+</script>
+</body>
+</html>

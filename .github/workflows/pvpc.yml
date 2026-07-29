@@ -1,0 +1,32 @@
+name: Actualizar PVPC
+
+on:
+  schedule:
+    # UTC. El PVPC de manana se publica ~20:15 hora peninsular:
+    # 18:45 y 19:45 UTC cubren verano/invierno; 05:00 UTC de seguridad.
+    - cron: "45 18 * * *"
+    - cron: "45 19 * * *"
+    - cron: "0 5 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  pvpc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Descargar precios
+        run: python scripts/fetch_pvpc.py
+      - name: Commit si hay cambios
+        run: |
+          git config user.name "cuanteo-bot"
+          git config user.email "hola@cuanteo.com"
+          git add precio-luz/data.json
+          git diff --cached --quiet && echo "Sin cambios" && exit 0
+          git commit -m "PVPC: actualizacion automatica"
+          git push
