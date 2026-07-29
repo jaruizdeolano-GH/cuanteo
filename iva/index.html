@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de IVA 2026 — añadir o quitar IVA (21%, 10%, 4%) | Cuanteo</title>
+<meta name="description" content="Calcula el IVA al instante: añade o quita el 21%, 10% o 4% de cualquier importe. Desglose de base imponible, cuota de IVA y total, con recargo de equivalencia. Gratis y sin registros.">
+<link rel="canonical" href="https://cuanteo.com/iva/">
+<meta property="og:title" content="Calculadora de IVA 2026 — Cuanteo">
+<meta property="og:description" content="Añade o quita el IVA (21%, 10%, 4%) de cualquier importe con desglose completo.">
+<meta property="og:url" content="https://cuanteo.com/iva/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Calculadora de IVA",
+      "url": "https://cuanteo.com/iva/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+      "inLanguage": "es"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cómo se calcula el IVA de un importe?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Multiplica la base imponible por el tipo de IVA. Por ejemplo, para 100 € al 21%: 100 × 0,21 = 21 € de IVA, y el total con IVA es 121 €."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo quito el IVA de un precio con IVA incluido?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Divide el importe total entre 1 más el tipo. Por ejemplo, 121 € al 21%: 121 ÷ 1,21 = 100 € de base imponible; la diferencia (21 €) es la cuota de IVA."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué tipos de IVA hay en España en 2026?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Tres tipos: general del 21% (la mayoría de bienes y servicios), reducido del 10% (hostelería, transporte, vivienda nueva) y superreducido del 4% (alimentos básicos, medicamentos, libros)."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué es el recargo de equivalencia?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Un recargo adicional al IVA que pagan los comerciantes minoristas en régimen de recargo de equivalencia: 5,2% sobre el tipo general, 1,4% sobre el reducido y 0,5% sobre el superreducido."}
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Cuanteo", "item": "https://cuanteo.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Calculadora de IVA", "item": "https://cuanteo.com/iva/"}
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --papel:#FAFAF7; --tinta:#1C2B36; --tinta-suave:#5A6B76;
+    --ambar:#E8A100; --verde:#2E6E63; --linea:#E3E2DC; --carta:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--papel);color:var(--tinta);
+    font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:baseline}
+  .marca{font-family:'Archivo';font-weight:900;font-size:1.25rem;
+    letter-spacing:-.02em;text-decoration:none}
+  .marca span{color:var(--ambar)}
+  nav a{font-size:.85rem;color:var(--tinta-suave);text-decoration:none}
+
+  h1{font-family:'Archivo';font-weight:900;font-stretch:85%;
+    font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.1;
+    letter-spacing:-.02em;margin:14px 0 8px}
+  .sub{color:var(--tinta-suave);max-width:56ch;margin-bottom:26px}
+
+  .calc{background:var(--carta);border:1px solid var(--linea);
+    border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(28,43,54,.05);
+    margin-bottom:40px}
+  .modo{display:flex;gap:6px;margin-bottom:20px}
+  .modo button{font-size:.85rem;font-weight:600;padding:8px 16px;
+    border-radius:999px;border:1px solid var(--linea);background:transparent;
+    cursor:pointer;color:var(--tinta-suave);font-family:inherit}
+  .modo button[aria-pressed="true"]{background:var(--tinta);color:#fff;
+    border-color:var(--tinta)}
+  .fila{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .campo label{display:block;font-size:.8rem;font-weight:600;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .campo input,.campo select{width:100%;padding:12px;font-size:1.05rem;
+    font-family:inherit;border:1px solid var(--linea);border-radius:9px;
+    background:var(--papel)}
+  .campo input:focus,.campo select:focus{outline:2px solid var(--ambar);
+    outline-offset:1px;border-color:var(--ambar)}
+  .check{display:flex;align-items:center;gap:8px;font-size:.85rem;
+    color:var(--tinta-suave);margin-bottom:18px}
+  .check input{width:16px;height:16px;accent-color:var(--verde)}
+
+  .desglose{background:var(--papel);border:1px dashed var(--linea);
+    border-radius:10px;padding:18px}
+  .desglose .linea{display:flex;justify-content:space-between;
+    padding:6px 0;font-size:.95rem;color:var(--tinta-suave)}
+  .desglose .linea strong{font-variant-numeric:tabular-nums;color:var(--tinta)}
+  .desglose .total{border-top:1px solid var(--linea);margin-top:8px;
+    padding-top:12px;font-size:1.05rem}
+  .desglose .total strong{font-family:'Archivo';font-weight:800;
+    font-size:1.5rem;color:var(--verde)}
+
+  article h2{font-family:'Archivo';font-weight:800;font-size:1.35rem;
+    letter-spacing:-.01em;margin:34px 0 10px}
+  article p{color:var(--tinta-suave);margin-bottom:14px;max-width:68ch}
+  article table{border-collapse:collapse;margin:8px 0 18px;font-size:.92rem}
+  article th,article td{border:1px solid var(--linea);padding:9px 14px;
+    text-align:left}
+  article th{background:var(--carta);font-weight:600}
+  article td{color:var(--tinta-suave)}
+  .faq details{border-bottom:1px solid var(--linea);padding:14px 0}
+  .faq summary{font-weight:600;cursor:pointer}
+  .faq p{margin-top:8px}
+  .aviso{font-size:.8rem;color:var(--tinta-suave);border-left:3px solid
+    var(--linea);padding:8px 14px;margin:30px 0}
+
+  footer{border-top:1px solid var(--linea);margin-top:44px;
+    padding:28px 0 40px;display:flex;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;font-size:.82rem;color:var(--tinta-suave)}
+  @media (max-width:600px){.fila{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="marca" href="/">cuanteo<span>.</span></a>
+    <nav><a href="/">todas las herramientas</a></nav>
+  </header>
+
+  <main>
+    <h1>Calculadora de IVA</h1>
+    <p class="sub">Añade o quita el IVA de cualquier importe con desglose de
+    base imponible, cuota y total. Tipos vigentes en España: 21%, 10% y 4%.</p>
+
+    <div class="calc">
+      <div class="modo" role="group" aria-label="Modo de cálculo">
+        <button type="button" id="m-add" aria-pressed="true"
+          onclick="setModo('add')">Añadir IVA</button>
+        <button type="button" id="m-quit" aria-pressed="false"
+          onclick="setModo('quit')">Quitar IVA</button>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="importe" id="lbl-importe">Importe sin IVA (€)</label>
+          <input type="number" id="importe" value="1000" min="0"
+            step="0.01" inputmode="decimal">
+        </div>
+        <div class="campo">
+          <label for="tipo">Tipo de IVA</label>
+          <select id="tipo">
+            <option value="21" selected>21% — general</option>
+            <option value="10">10% — reducido</option>
+            <option value="4">4% — superreducido</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="recargo">
+        Aplicar recargo de equivalencia (comercio minorista)
+      </label>
+
+      <div class="desglose" aria-live="polite">
+        <div class="linea">Base imponible <strong id="r-base">1.000,00 €</strong></div>
+        <div class="linea">Cuota de IVA (<span id="r-tipo">21</span>%)
+          <strong id="r-cuota">210,00 €</strong></div>
+        <div class="linea" id="fila-recargo" hidden>Recargo de equivalencia
+          (<span id="r-rec-tipo">5,2</span>%) <strong id="r-recargo">0,00 €</strong></div>
+        <div class="linea total">Total con IVA <strong id="r-total">1.210,00 €</strong></div>
+      </div>
+    </div>
+
+    <article>
+      <h2>Cómo se calcula el IVA</h2>
+      <p><strong>Para añadir el IVA</strong> a una base imponible, multiplica
+      el importe por el tipo: 1.000&nbsp;€ al 21% son 1.000&nbsp;×&nbsp;0,21 =
+      210&nbsp;€ de cuota, y un total de 1.210&nbsp;€.</p>
+      <p><strong>Para quitar el IVA</strong> de un precio con IVA incluido,
+      divide entre 1 más el tipo: 1.210&nbsp;÷&nbsp;1,21 = 1.000&nbsp;€ de
+      base. Un error frecuente es restar el 21% directamente del total —
+      eso da un resultado incorrecto, porque el porcentaje se aplicó sobre la
+      base, no sobre el total.</p>
+
+      <h2>Tipos de IVA en España (2026)</h2>
+      <table>
+        <tr><th>Tipo</th><th>Porcentaje</th><th>Se aplica a</th><th>Recargo equiv.</th></tr>
+        <tr><td>General</td><td>21%</td><td>La mayoría de bienes y servicios</td><td>5,2%</td></tr>
+        <tr><td>Reducido</td><td>10%</td><td>Hostelería, transporte, vivienda nueva, ciertos alimentos</td><td>1,4%</td></tr>
+        <tr><td>Superreducido</td><td>4%</td><td>Alimentos básicos, medicamentos, libros y prensa</td><td>0,5%</td></tr>
+      </table>
+      <p>El recargo de equivalencia es un suplemento que soportan los
+      comerciantes minoristas acogidos a ese régimen especial: lo paga el
+      comerciante a su proveedor junto con el IVA, a cambio de no presentar
+      autoliquidaciones de IVA.</p>
+
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        <details>
+          <summary>¿Cómo saco la base imponible de una factura con IVA?</summary>
+          <p>Divide el total entre 1 más el tipo en tanto por uno. Con IVA del
+          21%: total ÷ 1,21. Con el 10%: total ÷ 1,10. Con el 4%: total ÷ 1,04.</p>
+        </details>
+        <details>
+          <summary>¿Qué IVA lleva la luz y el gas?</summary>
+          <p>Con carácter general, el 21%, aunque en los últimos años se han
+          aplicado rebajas temporales; conviene comprobar el tipo vigente en
+          la propia factura.</p>
+        </details>
+        <details>
+          <summary>¿Los autónomos pueden deducirse el IVA?</summary>
+          <p>Sí: el IVA soportado en gastos afectos a la actividad se deduce
+          del IVA repercutido en las autoliquidaciones trimestrales
+          (modelo 303), salvo regímenes especiales como el recargo de
+          equivalencia.</p>
+        </details>
+        <details>
+          <summary>¿Este resultado sirve para presentar impuestos?</summary>
+          <p>La calculadora es orientativa. Para autoliquidaciones y casos con
+          regímenes especiales, prorrata o inversión del sujeto pasivo,
+          consulta con un asesor fiscal.</p>
+        </details>
+      </div>
+
+      <p class="aviso">Herramienta informativa. Los resultados no constituyen
+      asesoramiento fiscal. Tipos impositivos según la normativa española
+      vigente a julio de 2026.</p>
+    </article>
+  </main>
+
+  <footer>
+    <span>© 2026 Cuanteo · Arlobi Consulting SLNE</span>
+    <span>
+      <a href="/aviso-legal/">Aviso legal</a> ·
+      <a href="/privacidad/">Privacidad</a> ·
+      <a href="/cookies/">Cookies</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+  const fmt = new Intl.NumberFormat("es-ES",
+    {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const REC = {"21": 5.2, "10": 1.4, "4": 0.5};
+  let modo = "add";
+
+  function setModo(m) {
+    modo = m;
+    document.getElementById("m-add").setAttribute("aria-pressed", m === "add");
+    document.getElementById("m-quit").setAttribute("aria-pressed", m === "quit");
+    document.getElementById("lbl-importe").textContent =
+      m === "add" ? "Importe sin IVA (€)" : "Importe con IVA (€)";
+    calc();
+  }
+
+  function calc() {
+    const v = parseFloat(document.getElementById("importe").value);
+    const t = parseFloat(document.getElementById("tipo").value);
+    const conRec = document.getElementById("recargo").checked;
+    const recT = REC[String(t)];
+    if (!isFinite(v) || v < 0) return;
+
+    let base, cuota;
+    if (modo === "add") {
+      base = v;
+      cuota = base * t / 100;
+    } else {
+      // quitar IVA (si hay recargo, el total incluye IVA + recargo)
+      const divisor = 1 + t / 100 + (conRec ? recT / 100 : 0);
+      base = v / divisor;
+      cuota = base * t / 100;
+    }
+    const recargo = conRec ? base * recT / 100 : 0;
+    const total = base + cuota + recargo;
+
+    document.getElementById("r-base").textContent = fmt.format(base) + " €";
+    document.getElementById("r-tipo").textContent = t;
+    document.getElementById("r-cuota").textContent = fmt.format(cuota) + " €";
+    document.getElementById("fila-recargo").hidden = !conRec;
+    document.getElementById("r-rec-tipo").textContent =
+      String(recT).replace(".", ",");
+    document.getElementById("r-recargo").textContent = fmt.format(recargo) + " €";
+    document.getElementById("r-total").textContent = fmt.format(total) + " €";
+  }
+
+  for (const id of ["importe", "tipo", "recargo"]) {
+    document.getElementById(id).addEventListener("input", calc);
+    document.getElementById(id).addEventListener("change", calc);
+  }
+  calc();
+</script>
+</body>
+</html>
