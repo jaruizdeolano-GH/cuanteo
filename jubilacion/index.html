@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de jubilación 2026 — edad legal y estimación de pensión | Cuanteo</title>
+<meta name="description" content="¿Cuándo te puedes jubilar y cuánto cobrarás? Calcula tu edad legal de jubilación según tus años cotizados y una primera estimación de tu pensión con la normativa vigente.">
+<link rel="canonical" href="https://cuanteo.com/jubilacion/">
+<meta property="og:title" content="Calculadora de jubilación — Cuanteo">
+<meta property="og:description" content="Tu edad legal de jubilación y una primera estimación de tu pensión.">
+<meta property="og:url" content="https://cuanteo.com/jubilacion/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Calculadora de jubilación",
+      "url": "https://cuanteo.com/jubilacion/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+      "inLanguage": "es"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿A qué edad me puedo jubilar en España?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Desde 2027, la edad ordinaria es 67 años, o 65 años si acreditas al menos 38 años y 6 meses cotizados. En 2026 es 66 años y 10 meses, o 65 con 38 años y 3 meses cotizados."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuántos años hay que cotizar para cobrar el 100% de la pensión?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Con la escala definitiva (desde 2027), se alcanza el 100% de la base reguladora con 37 años cotizados. Con 15 años (el mínimo para tener derecho a pensión) se cobra el 50%."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se calcula la base reguladora?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Se suman las bases de cotización de los últimos 25 años (300 meses) y se divide entre 350. El resultado es el importe mensual de referencia sobre el que se aplica el porcentaje por años cotizados."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Existe una pensión máxima?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Sí. La pensión pública tiene un tope mensual fijado cada año en los Presupuestos Generales del Estado, independientemente de lo cotizado por encima de la base máxima."}
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Cuanteo", "item": "https://cuanteo.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Calculadora de jubilación", "item": "https://cuanteo.com/jubilacion/"}
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --papel:#FAFAF7; --tinta:#1C2B36; --tinta-suave:#5A6B76;
+    --ambar:#E8A100; --verde:#2E6E63; --linea:#E3E2DC; --carta:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--papel);color:var(--tinta);
+    font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:baseline}
+  .marca{font-family:'Archivo';font-weight:900;font-size:1.25rem;
+    letter-spacing:-.02em;text-decoration:none}
+  .marca span{color:var(--ambar)}
+  nav a{font-size:.85rem;color:var(--tinta-suave);text-decoration:none}
+  h1{font-family:'Archivo';font-weight:900;font-stretch:85%;
+    font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.1;
+    letter-spacing:-.02em;margin:14px 0 8px}
+  .sub{color:var(--tinta-suave);max-width:58ch;margin-bottom:26px}
+
+  .calc{background:var(--carta);border:1px solid var(--linea);
+    border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(28,43,54,.05);
+    margin-bottom:40px}
+  .fila{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:18px}
+  .campo label{display:block;font-size:.8rem;font-weight:600;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .campo input{width:100%;padding:12px;font-size:1.05rem;font-family:inherit;
+    border:1px solid var(--linea);border-radius:9px;background:var(--papel)}
+  .campo input:focus{outline:2px solid var(--ambar);outline-offset:1px;
+    border-color:var(--ambar)}
+  .campo .pista{font-size:.72rem;color:var(--tinta-suave);margin-top:4px}
+
+  .resultado{background:var(--papel);border:1px dashed var(--linea);
+    border-radius:10px;padding:20px}
+  .res-grande{display:grid;grid-template-columns:1fr 1fr;gap:20px;
+    margin-bottom:14px}
+  .res-grande div span{display:block;font-size:.78rem;font-weight:600;
+    color:var(--tinta-suave)}
+  .res-grande div strong{font-family:'Archivo';font-weight:800;
+    font-size:1.55rem;color:var(--verde);font-variant-numeric:tabular-nums}
+  .res-detalle{border-top:1px solid var(--linea);padding-top:12px}
+  .res-detalle .linea{display:flex;justify-content:space-between;
+    padding:4px 0;font-size:.9rem;color:var(--tinta-suave)}
+  .res-detalle .linea[hidden]{display:none}
+  .res-detalle .linea strong{font-variant-numeric:tabular-nums;color:var(--tinta)}
+  .alerta{margin-top:12px;font-size:.83rem;color:#8a5a00;background:#FCF3DC;
+    border-radius:8px;padding:10px 14px}
+  .alerta[hidden]{display:none}
+
+  article h2{font-family:'Archivo';font-weight:800;font-size:1.35rem;
+    letter-spacing:-.01em;margin:34px 0 10px}
+  article p{color:var(--tinta-suave);margin-bottom:14px;max-width:68ch}
+  article table{border-collapse:collapse;margin:8px 0 18px;font-size:.92rem}
+  article th,article td{border:1px solid var(--linea);padding:9px 14px;
+    text-align:left;font-variant-numeric:tabular-nums}
+  article th{background:var(--carta);font-weight:600}
+  article td{color:var(--tinta-suave)}
+  .faq details{border-bottom:1px solid var(--linea);padding:14px 0}
+  .faq summary{font-weight:600;cursor:pointer}
+  .faq p{margin-top:8px}
+  .aviso{font-size:.8rem;color:var(--tinta-suave);border-left:3px solid
+    var(--ambar);padding:8px 14px;margin:30px 0}
+  footer{border-top:1px solid var(--linea);margin-top:44px;
+    padding:28px 0 40px;display:flex;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;font-size:.82rem;color:var(--tinta-suave)}
+  @media (max-width:680px){.fila{grid-template-columns:1fr}
+    .res-grande{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="marca" href="/">cuanteo<span>.</span></a>
+    <nav><a href="/">todas las herramientas</a></nav>
+  </header>
+
+  <main>
+    <h1>Calculadora de jubilación</h1>
+    <p class="sub">¿Cuándo te puedes jubilar y cuánto cobrarás? Calcula tu
+    edad legal según tus años cotizados y una primera estimación de tu
+    pensión con la normativa vigente.</p>
+
+    <div class="calc">
+      <div class="fila">
+        <div class="campo">
+          <label for="nac">Año de nacimiento</label>
+          <input type="number" id="nac" value="1975" min="1940" max="2010"
+            inputmode="numeric">
+        </div>
+        <div class="campo">
+          <label for="cot">Años cotizados hasta hoy</label>
+          <input type="number" id="cot" value="25" min="0" max="55"
+            step="0.5" inputmode="decimal">
+          <div class="pista">Lo tienes en tu informe de vida laboral</div>
+        </div>
+        <div class="campo">
+          <label for="sal">Salario bruto anual (€)</label>
+          <input type="number" id="sal" value="30000" min="0" step="500"
+            inputmode="numeric">
+          <div class="pista">Se asume constante hasta la jubilación</div>
+        </div>
+      </div>
+
+      <div class="resultado" aria-live="polite">
+        <div class="res-grande">
+          <div><span>Edad legal de jubilación</span>
+            <strong id="r-edad">—</strong></div>
+          <div><span>Pensión mensual estimada (14 pagas)</span>
+            <strong id="r-pension">—</strong></div>
+        </div>
+        <div class="res-detalle">
+          <div class="linea"><span>Año estimado de jubilación</span>
+            <strong id="r-anio">—</strong></div>
+          <div class="linea"><span>Años cotizados a esa fecha (estimados)</span>
+            <strong id="r-cot-total">—</strong></div>
+          <div class="linea"><span>Porcentaje de la base reguladora</span>
+            <strong id="r-pct">—</strong></div>
+          <div class="linea"><span>Base reguladora estimada</span>
+            <strong id="r-br">—</strong></div>
+          <div class="linea" id="l-tope" hidden><span>Aplicado tope de pensión máxima</span>
+            <strong id="r-tope">—</strong></div>
+        </div>
+        <div class="alerta" id="alerta-carencia" hidden>Con menos de 15 años
+        cotizados a la edad de jubilación no se genera derecho a pensión
+        contributiva.</div>
+      </div>
+    </div>
+
+    <article>
+      <h2>Cómo funciona el cálculo</h2>
+      <p><strong>La edad legal</strong> depende de cuánto hayas cotizado:
+      desde 2027, la edad ordinaria es <strong>67 años</strong>, que baja a
+      <strong>65</strong> si acreditas al menos 38 años y 6 meses. Esta
+      calculadora estima tus años cotizados a la fecha de jubilación
+      asumiendo que sigues cotizando sin interrupciones desde hoy.</p>
+      <p><strong>La pensión</strong> se estima en dos pasos: la base
+      reguladora (las bases de cotización de tus últimos 25 años, sumadas y
+      divididas entre 350) y el porcentaje que te corresponde por años
+      cotizados — 50% con 15 años, 100% con 37 (escala vigente desde 2027).
+      El resultado se limita a la pensión máxima que fija cada año la ley.</p>
+
+      <h2>Edad de jubilación por año</h2>
+      <table>
+        <tr><th>Año</th><th>Edad ordinaria</th><th>Con cotización suficiente</th><th>Cotización exigida</th></tr>
+        <tr><td>2025</td><td>66 años y 8 meses</td><td>65 años</td><td>38 a. y 3 m.</td></tr>
+        <tr><td>2026</td><td>66 años y 10 meses</td><td>65 años</td><td>38 a. y 3 m.</td></tr>
+        <tr><td>2027 en adelante</td><td>67 años</td><td>65 años</td><td>38 a. y 6 m.</td></tr>
+      </table>
+
+      <h2>Lo que esta estimación no incluye</h2>
+      <p>Para mantener el cálculo honesto, conviene saber qué queda fuera:
+      la <strong>jubilación anticipada</strong> (voluntaria o involuntaria,
+      con sus coeficientes reductores), la <strong>jubilación demorada</strong>
+      y sus incentivos, las <strong>lagunas de cotización</strong> y su
+      integración, el <strong>complemento de brecha de género</strong>, los
+      regímenes especiales, y la evolución futura de tu salario y de las
+      bases (se asumen constantes). Para un cálculo oficial con tu vida
+      laboral real, usa el simulador de la Seguridad Social (Import@ss) o
+      consulta con un asesor.</p>
+
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        <details>
+          <summary>¿Dónde veo mis años cotizados reales?</summary>
+          <p>En tu informe de vida laboral, que puedes descargar al momento
+          en el portal Import@ss de la Seguridad Social con Cl@ve, certificado
+          digital o SMS.</p>
+        </details>
+        <details>
+          <summary>¿Por qué mi pensión estimada es menor que mi sueldo?</summary>
+          <p>Por dos vías: el porcentaje por años cotizados (solo con 37 años
+          se alcanza el 100%) y el tope de la base de cotización — los
+          salarios por encima de la base máxima no cotizan por el exceso, así
+          que la pensión no lo refleja.</p>
+        </details>
+        <details>
+          <summary>¿Puedo jubilarme antes de la edad legal?</summary>
+          <p>Existe la jubilación anticipada voluntaria hasta 24 meses antes
+          de tu edad legal, con coeficientes reductores que disminuyen la
+          pensión de forma permanente. Esta calculadora no la contempla.</p>
+        </details>
+        <details>
+          <summary>¿Esta estimación es oficial?</summary>
+          <p>No. Es una aproximación orientativa con la normativa general.
+          El único cálculo oficial es el de la Seguridad Social sobre tus
+          bases reales de cotización.</p>
+        </details>
+      </div>
+
+      <p class="aviso"><strong>Estimación orientativa.</strong> Este resultado
+      no constituye asesoramiento ni un cálculo oficial de pensión. Se basa en
+      la normativa general vigente y en los supuestos simplificados descritos
+      arriba. Parámetros actualizados a julio de 2026; bases y topes según los
+      últimos valores publicados.</p>
+    </article>
+  </main>
+
+  <footer>
+    <span>© 2026 Cuanteo · Arlobi Consulting SLNE</span>
+    <span>
+      <a href="/aviso-legal/">Aviso legal</a> ·
+      <a href="/privacidad/">Privacidad</a> ·
+      <a href="/cookies/">Cookies</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+  const fmt = new Intl.NumberFormat("es-ES",
+    {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const $ = id => document.getElementById(id);
+  let P = null;
+
+  function edadTexto(meses) {
+    const a = Math.floor(meses / 12), m = meses % 12;
+    return m ? `${a} años y ${m} m.` : `${a} años`;
+  }
+
+  function calc() {
+    if (!P) return;
+    const nac = parseInt($("nac").value);
+    const cotHoy = parseFloat($("cot").value);
+    const sal = parseFloat($("sal").value);
+    if (!isFinite(nac) || !isFinite(cotHoy) || !isFinite(sal)) return;
+
+    const hoy = new Date().getFullYear();
+    const edadHoy = hoy - nac;
+
+    // regimen aplicable segun anio probable de jubilacion (>=2027 casi siempre)
+    const reg67 = P.edad_regimen_2027;
+    // años cotizados que tendria a los 65 (cotizacion continua desde hoy)
+    const cotA65 = cotHoy + Math.max(0, 65 - edadHoy);
+    let edadMeses;
+    if (cotA65 >= reg67.carencia_para_reducida_anios) {
+      edadMeses = reg67.edad_reducida_meses;        // 65
+    } else {
+      edadMeses = reg67.edad_ordinaria_meses;       // 67
+    }
+    // si se jubila en 2026, aplicar regimen transitorio de ese año
+    let anioJub = nac + Math.floor(edadMeses / 12);
+    if (anioJub <= 2026) {
+      const r26 = P.edad_regimen_2026;
+      edadMeses = (cotA65 >= r26.carencia_para_reducida_anios)
+        ? r26.edad_reducida_meses : r26.edad_ordinaria_meses;
+      anioJub = nac + Math.floor(edadMeses / 12);
+    }
+
+    const cotTotal = cotHoy + Math.max(0, edadMeses / 12 - edadHoy);
+
+    $("r-edad").textContent = edadTexto(edadMeses);
+    $("r-anio").textContent = String(anioJub);
+    $("r-cot-total").textContent =
+      fmt.format(Math.round(cotTotal * 2) / 2).replace(",00", "") + " años";
+
+    // carencia minima
+    const sinDerecho = cotTotal < P.carencia_minima_anios;
+    $("alerta-carencia").hidden = !sinDerecho;
+    if (sinDerecho) {
+      $("r-pension").textContent = "—";
+      $("r-pct").textContent = "—";
+      $("r-br").textContent = "—";
+      $("l-tope").hidden = true;
+      return;
+    }
+
+    // porcentaje por años cotizados (escala 2027)
+    const e = P.escala_porcentaje_2027;
+    const mesesExtra = Math.max(0,
+      Math.floor((cotTotal - P.carencia_minima_anios) * 12));
+    const pct = Math.min(100,
+      e.base_pct +
+      Math.min(mesesExtra, e.tramo1_meses) * e.tramo1_pct_mes +
+      Math.max(0, Math.min(mesesExtra - e.tramo1_meses, e.tramo2_meses))
+        * e.tramo2_pct_mes);
+
+    // base reguladora: base mensual (salario/12) topada, x 300/350
+    const baseMensual = Math.min(
+      Math.max(sal / 12, 0), P.base_cotizacion_max_mensual);
+    const br = baseMensual * P.base_reguladora.meses_computados
+      / P.base_reguladora.divisor;
+
+    let pension = br * pct / 100;
+    const topada = pension > P.pension_maxima_mensual;
+    if (topada) pension = P.pension_maxima_mensual;
+
+    $("r-pct").textContent = fmt.format(pct).replace(",00", "") + " %";
+    $("r-br").textContent = fmt.format(br) + " €/mes";
+    $("r-pension").textContent = fmt.format(pension) + " €";
+    $("l-tope").hidden = !topada;
+    $("r-tope").textContent = fmt.format(P.pension_maxima_mensual) + " €";
+  }
+
+  fetch("params.json")
+    .then(r => r.json())
+    .then(p => { P = p; calc(); })
+    .catch(() => {
+      document.querySelector(".resultado").innerHTML =
+        "<p>No se han podido cargar los parámetros. Recarga la página.</p>";
+    });
+
+  for (const id of ["nac", "cot", "sal"])
+    $(id).addEventListener("input", calc);
+</script>
+</body>
+</html>

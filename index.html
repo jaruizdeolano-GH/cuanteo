@@ -67,6 +67,13 @@
   .tile p{font-size:.85rem;color:var(--tinta-suave)}
   .tile .pronto{display:inline-block;margin-top:10px;font-size:.72rem;font-weight:600;
     color:var(--tinta-suave);border:1px solid var(--linea);border-radius:999px;padding:3px 9px}
+  a.tile{text-decoration:none;display:block}
+  .tile-live{border-color:var(--verde);border-width:1.5px;
+    box-shadow:0 2px 6px rgba(46,110,99,.10);transition:transform .12s,box-shadow .12s}
+  .tile-live:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(46,110,99,.16)}
+  .tile-live h3{font-size:1.12rem}
+  .tile .cta{display:inline-block;margin-top:12px;font-size:.82rem;font-weight:700;
+    color:var(--verde)}
 
   footer{border-top:1px solid var(--linea);padding:34px 0 46px;
     display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
@@ -135,15 +142,36 @@
     </section>
 
     <section class="seccion">
-      <h2>En camino</h2>
-      <p class="sub">Cada herramienta responde a una pregunta concreta con datos
-        actualizados de fuentes oficiales. Estas son las primeras.</p>
-      <div class="grid">
-        <a class="tile" href="/iva/" style="text-decoration:none">
+      <h2>Herramientas disponibles</h2>
+      <p class="sub">Listas para usar: gratis, sin registros, con datos de
+        fuentes oficiales.</p>
+      <div class="grid grid-live">
+        <a class="tile tile-live" href="/jubilacion/">
+          <span class="q">¿Cuándo me jubilo?</span>
+          <h3>Jubilación y pensión</h3>
+          <p>Tu edad legal de jubilación y una primera estimación de tu
+            pensión con la normativa vigente.</p>
+          <span class="cta">Calcular →</span></a>
+        <a class="tile tile-live" href="/iva/">
           <span class="q">¿Cuánto es con IVA?</span>
           <h3>Calculadora de IVA</h3>
-          <p>Añade o quita el 21%, 10% o 4% con desglose de base y cuota.</p>
-          <span class="pronto" style="color:var(--verde);border-color:var(--verde)">disponible</span></a>
+          <p>Añade o quita el 21%, 10% o 4% con desglose de base imponible
+            y cuota.</p>
+          <span class="cta">Calcular →</span></a>
+        <a class="tile tile-live" href="/ritmo-carrera/">
+          <span class="q">¿Cuánto tardaré?</span>
+          <h3>Ritmo de carrera</h3>
+          <p>Ritmo por km, velocidad y predicción de tiempos de 5K a
+            maratón.</p>
+          <span class="cta">Calcular →</span></a>
+      </div>
+    </section>
+
+    <section class="seccion">
+      <h2>En camino</h2>
+      <p class="sub">Cada herramienta responde a una pregunta concreta con datos
+        actualizados de fuentes oficiales. Estas son las siguientes.</p>
+      <div class="grid">
         <div class="tile"><span class="q">¿Cuánto cobro?</span>
           <h3>Sueldo neto</h3>
           <p>De bruto a neto con las tablas de IRPF y cotizaciones vigentes.</p>
@@ -164,11 +192,6 @@
           <h3>Cuota de autónomos</h3>
           <p>Tu cuota por tramos de rendimiento según la normativa en vigor.</p>
           <span class="pronto">próximamente</span></div>
-        <a class="tile" href="/ritmo-carrera/" style="text-decoration:none">
-          <span class="q">¿Cuánto tardaré?</span>
-          <h3>Ritmo de carrera</h3>
-          <p>Tu ritmo por km, velocidad y prediccion de tiempos de 5K a maratón.</p>
-          <span class="pronto" style="color:var(--verde);border-color:var(--verde)">disponible</span></a>
         <div class="tile"><span class="q">¿Cuánto me devuelven?</span>
           <h3>Reclamaciones</h3>
           <p>Vuelos retrasados, gastos de hipoteca: calcula lo reclamable.</p>
