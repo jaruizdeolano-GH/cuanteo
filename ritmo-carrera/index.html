@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de ritmo de carrera — min/km, tiempos 5K a maratón | Cuanteo</title>
+<meta name="description" content="Calcula tu ritmo por kilómetro, tu tiempo o tu distancia. Convierte a km/h y predice tus tiempos equivalentes en 5K, 10K, media maratón y maratón. Gratis.">
+<link rel="canonical" href="https://cuanteo.com/ritmo-carrera/">
+<meta property="og:title" content="Calculadora de ritmo de carrera — Cuanteo">
+<meta property="og:description" content="Ritmo por km, velocidad y predicción de tiempos de 5K a maratón.">
+<meta property="og:url" content="https://cuanteo.com/ritmo-carrera/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Calculadora de ritmo de carrera",
+      "url": "https://cuanteo.com/ritmo-carrera/",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+      "inLanguage": "es"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cómo se calcula el ritmo por kilómetro?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Divide el tiempo total entre la distancia. Por ejemplo, 50 minutos para 10 km son 5:00 min/km. Para pasarlo a velocidad: 60 dividido entre el ritmo en minutos, es decir, 12 km/h."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué ritmo necesito para bajar de 50 minutos en 10K?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Un ritmo medio inferior a 5:00 min/km. Para bajar de 45 minutos necesitas 4:30 min/km, y para bajar de 40 minutos, 4:00 min/km."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se predice el tiempo de maratón a partir del 10K?",
+          "acceptedAnswer": {"@type": "Answer", "text": "La fórmula de Riegel estima tiempos equivalentes: T2 = T1 × (D2/D1)^1,06. Un 10K en 50 minutos equivale aproximadamente a una maratón en 3h50m, asumiendo un entrenamiento adecuado para la distancia."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuánto mide una media maratón y una maratón?",
+          "acceptedAnswer": {"@type": "Answer", "text": "La media maratón mide 21,097 km y la maratón 42,195 km."}
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Cuanteo", "item": "https://cuanteo.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Calculadora de ritmo", "item": "https://cuanteo.com/ritmo-carrera/"}
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --papel:#FAFAF7; --tinta:#1C2B36; --tinta-suave:#5A6B76;
+    --ambar:#E8A100; --verde:#2E6E63; --linea:#E3E2DC; --carta:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--papel);color:var(--tinta);
+    font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:baseline}
+  .marca{font-family:'Archivo';font-weight:900;font-size:1.25rem;
+    letter-spacing:-.02em;text-decoration:none}
+  .marca span{color:var(--ambar)}
+  nav a{font-size:.85rem;color:var(--tinta-suave);text-decoration:none}
+  h1{font-family:'Archivo';font-weight:900;font-stretch:85%;
+    font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.1;
+    letter-spacing:-.02em;margin:14px 0 8px}
+  .sub{color:var(--tinta-suave);max-width:56ch;margin-bottom:26px}
+
+  .calc{background:var(--carta);border:1px solid var(--linea);
+    border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(28,43,54,.05);
+    margin-bottom:40px}
+  .modo{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .modo button{font-size:.85rem;font-weight:600;padding:8px 16px;
+    border-radius:999px;border:1px solid var(--linea);background:transparent;
+    cursor:pointer;color:var(--tinta-suave);font-family:inherit}
+  .modo button[aria-pressed="true"]{background:var(--tinta);color:#fff;
+    border-color:var(--tinta)}
+  .fila{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .campo label{display:block;font-size:.8rem;font-weight:600;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .campo select{width:100%;padding:12px;font-size:1rem;font-family:inherit;
+    border:1px solid var(--linea);border-radius:9px;background:var(--papel)}
+  .trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .trio input{width:100%;padding:12px 8px;font-size:1.05rem;text-align:center;
+    font-family:inherit;border:1px solid var(--linea);border-radius:9px;
+    background:var(--papel);font-variant-numeric:tabular-nums}
+  .trio input:focus,.campo select:focus,.campo input:focus{
+    outline:2px solid var(--ambar);outline-offset:1px;border-color:var(--ambar)}
+  .campo input[type=number]{width:100%;padding:12px;font-size:1.05rem;
+    font-family:inherit;border:1px solid var(--linea);border-radius:9px;
+    background:var(--papel)}
+  .unidades{font-size:.7rem;color:var(--tinta-suave);display:grid;
+    grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-top:3px}
+
+  .resultado{background:var(--papel);border:1px dashed var(--linea);
+    border-radius:10px;padding:18px;margin-top:6px}
+  .res-grande{display:flex;gap:34px;flex-wrap:wrap}
+  .res-grande div span{display:block;font-size:.78rem;font-weight:600;
+    color:var(--tinta-suave)}
+  .res-grande div strong{font-family:'Archivo';font-weight:800;
+    font-size:1.7rem;color:var(--verde);font-variant-numeric:tabular-nums}
+  .equiv{margin-top:16px;border-top:1px solid var(--linea);padding-top:12px}
+  .equiv h4{font-size:.8rem;font-weight:600;color:var(--tinta-suave);
+    margin-bottom:8px}
+  .equiv table{width:100%;border-collapse:collapse;font-size:.92rem}
+  .equiv td{padding:5px 0;color:var(--tinta-suave)}
+  .equiv td:last-child{text-align:right;font-variant-numeric:tabular-nums;
+    color:var(--tinta);font-weight:600}
+
+  article h2{font-family:'Archivo';font-weight:800;font-size:1.35rem;
+    letter-spacing:-.01em;margin:34px 0 10px}
+  article p{color:var(--tinta-suave);margin-bottom:14px;max-width:68ch}
+  article table{border-collapse:collapse;margin:8px 0 18px;font-size:.92rem}
+  article th,article td{border:1px solid var(--linea);padding:9px 14px;
+    text-align:left;font-variant-numeric:tabular-nums}
+  article th{background:var(--carta);font-weight:600}
+  article td{color:var(--tinta-suave)}
+  .faq details{border-bottom:1px solid var(--linea);padding:14px 0}
+  .faq summary{font-weight:600;cursor:pointer}
+  .faq p{margin-top:8px}
+  .aviso{font-size:.8rem;color:var(--tinta-suave);border-left:3px solid
+    var(--linea);padding:8px 14px;margin:30px 0}
+  footer{border-top:1px solid var(--linea);margin-top:44px;
+    padding:28px 0 40px;display:flex;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;font-size:.82rem;color:var(--tinta-suave)}
+  @media (max-width:600px){.fila{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="marca" href="/">cuanteo<span>.</span></a>
+    <nav><a href="/">todas las herramientas</a></nav>
+  </header>
+
+  <main>
+    <h1>Calculadora de ritmo de carrera</h1>
+    <p class="sub">Calcula tu ritmo por kilómetro, tu tiempo objetivo o la
+    distancia recorrida — y predice tus tiempos equivalentes de 5K a maratón.</p>
+
+    <div class="calc">
+      <div class="modo" role="group" aria-label="Qué quieres calcular">
+        <button type="button" id="m-ritmo" aria-pressed="true"
+          onclick="setModo('ritmo')">Calcular ritmo</button>
+        <button type="button" id="m-tiempo" aria-pressed="false"
+          onclick="setModo('tiempo')">Calcular tiempo</button>
+        <button type="button" id="m-dist" aria-pressed="false"
+          onclick="setModo('dist')">Calcular distancia</button>
+      </div>
+
+      <div class="fila">
+        <div class="campo" id="c-dist">
+          <label for="dist-sel">Distancia</label>
+          <select id="dist-sel">
+            <option value="5">5 km</option>
+            <option value="10" selected>10 km</option>
+            <option value="21.097">Media maratón (21,097 km)</option>
+            <option value="42.195">Maratón (42,195 km)</option>
+            <option value="custom">Otra distancia…</option>
+          </select>
+          <input type="number" id="dist-custom" value="10" min="0.1"
+            step="0.1" inputmode="decimal" style="display:none;margin-top:8px"
+            aria-label="Distancia en kilómetros">
+        </div>
+
+        <div class="campo" id="c-tiempo">
+          <label>Tiempo</label>
+          <div class="trio">
+            <input type="number" id="t-h" value="0" min="0" max="99" inputmode="numeric" aria-label="Horas">
+            <input type="number" id="t-m" value="50" min="0" max="59" inputmode="numeric" aria-label="Minutos">
+            <input type="number" id="t-s" value="0" min="0" max="59" inputmode="numeric" aria-label="Segundos">
+          </div>
+          <div class="unidades"><span>horas</span><span>min</span><span>seg</span></div>
+        </div>
+
+        <div class="campo" id="c-ritmo" style="display:none">
+          <label>Ritmo (por km)</label>
+          <div class="trio" style="grid-template-columns:1fr 1fr">
+            <input type="number" id="r-m" value="5" min="0" max="59" inputmode="numeric" aria-label="Minutos por kilómetro">
+            <input type="number" id="r-s" value="0" min="0" max="59" inputmode="numeric" aria-label="Segundos por kilómetro">
+          </div>
+          <div class="unidades" style="grid-template-columns:1fr 1fr">
+            <span>min</span><span>seg</span></div>
+        </div>
+      </div>
+
+      <div class="resultado" aria-live="polite">
+        <div class="res-grande">
+          <div><span id="out1-label">Ritmo</span><strong id="out1">5:00 /km</strong></div>
+          <div><span>Velocidad</span><strong id="out2">12,0 km/h</strong></div>
+        </div>
+        <div class="equiv" id="equiv">
+          <h4>Tiempos equivalentes (fórmula de Riegel)</h4>
+          <table>
+            <tr><td>5K</td><td id="eq-5">—</td></tr>
+            <tr><td>10K</td><td id="eq-10">—</td></tr>
+            <tr><td>Media maratón</td><td id="eq-21">—</td></tr>
+            <tr><td>Maratón</td><td id="eq-42">—</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <article>
+      <h2>Cómo se calcula el ritmo</h2>
+      <p>El ritmo es el tiempo que tardas en recorrer un kilómetro:
+      <strong>tiempo total ÷ distancia</strong>. Correr 10 km en 50 minutos es
+      un ritmo de 5:00 min/km, que equivale a 12 km/h (60 ÷ 5). Es la métrica
+      de referencia para planificar entrenamientos y carreras: los planes se
+      expresan en ritmos, no en velocidades.</p>
+
+      <h2>Tabla de ritmos y tiempos habituales</h2>
+      <table>
+        <tr><th>Ritmo</th><th>5K</th><th>10K</th><th>Media</th><th>Maratón</th></tr>
+        <tr><td>6:00 /km</td><td>30:00</td><td>1:00:00</td><td>2:06:35</td><td>4:13:10</td></tr>
+        <tr><td>5:30 /km</td><td>27:30</td><td>55:00</td><td>1:56:02</td><td>3:52:04</td></tr>
+        <tr><td>5:00 /km</td><td>25:00</td><td>50:00</td><td>1:45:29</td><td>3:30:59</td></tr>
+        <tr><td>4:30 /km</td><td>22:30</td><td>45:00</td><td>1:34:56</td><td>3:09:53</td></tr>
+        <tr><td>4:00 /km</td><td>20:00</td><td>40:00</td><td>1:24:23</td><td>2:48:47</td></tr>
+      </table>
+
+      <h2>La predicción de tiempos equivalentes</h2>
+      <p>La calculadora usa la <strong>fórmula de Riegel</strong>
+      (T2 = T1 × (D2/D1)<sup>1,06</sup>), el estándar para estimar qué marca
+      podrías hacer en otra distancia a partir de una marca conocida. El
+      exponente 1,06 refleja que el ritmo sostenible baja al alargar la
+      distancia. La predicción asume que entrenas específicamente para la
+      distancia objetivo — un 10K rápido no garantiza la maratón equivalente
+      sin la preparación de fondo correspondiente.</p>
+
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        <details>
+          <summary>¿Cómo convierto ritmo (min/km) a velocidad (km/h)?</summary>
+          <p>Divide 60 entre el ritmo expresado en minutos. Un ritmo de
+          5:30 min/km son 5,5 minutos: 60 ÷ 5,5 = 10,9 km/h.</p>
+        </details>
+        <details>
+          <summary>¿Qué ritmo llevan los corredores populares?</summary>
+          <p>En un 10K popular, el grueso de participantes termina entre 50 y
+          65 minutos (5:00–6:30 min/km). Bajar de 45 minutos (4:30 min/km) ya
+          sitúa en la parte delantera de la mayoría de carreras populares.</p>
+        </details>
+        <details>
+          <summary>¿La cinta de correr mide igual el ritmo?</summary>
+          <p>La cinta muestra velocidad (km/h); para convertirla a ritmo,
+          60 ÷ velocidad. 12 km/h en cinta equivalen a 5:00 min/km.</p>
+        </details>
+      </div>
+
+      <p class="aviso">Herramienta informativa de uso deportivo. Las
+      predicciones de tiempo son estimaciones estadísticas, no garantías de
+      rendimiento.</p>
+    </article>
+  </main>
+
+  <footer>
+    <span>© 2026 Cuanteo · Arlobi Consulting SLNE</span>
+    <span>
+      <a href="/aviso-legal/">Aviso legal</a> ·
+      <a href="/privacidad/">Privacidad</a> ·
+      <a href="/cookies/">Cookies</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+  let modo = "ritmo";
+  const $ = id => document.getElementById(id);
+
+  function setModo(m) {
+    modo = m;
+    for (const k of ["ritmo", "tiempo", "dist"])
+      $("m-" + k).setAttribute("aria-pressed", k === m);
+    $("c-dist").style.display = (m === "dist") ? "none" : "";
+    $("c-tiempo").style.display = (m === "tiempo") ? "none" : "";
+    $("c-ritmo").style.display = (m === "ritmo") ? "none" : "";
+    calc();
+  }
+
+  function getDist() {
+    const sel = $("dist-sel").value;
+    return sel === "custom" ? parseFloat($("dist-custom").value) : parseFloat(sel);
+  }
+  function getTiempoS() {
+    return (parseInt($("t-h").value) || 0) * 3600 +
+           (parseInt($("t-m").value) || 0) * 60 +
+           (parseInt($("t-s").value) || 0);
+  }
+  function getRitmoS() {
+    return (parseInt($("r-m").value) || 0) * 60 +
+           (parseInt($("r-s").value) || 0);
+  }
+
+  function fmtTiempo(s) {
+    s = Math.round(s);
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
+    const mm = String(m).padStart(h ? 2 : 1, "0"), sss = String(ss).padStart(2, "0");
+    return h ? `${h}:${mm}:${sss}` : `${mm}:${sss}`;
+  }
+  function fmtRitmo(sPerKm) {
+    const m = Math.floor(sPerKm / 60), s = Math.round(sPerKm % 60);
+    return `${m}:${String(s).padStart(2, "0")} /km`;
+  }
+
+  const DISTS = [["eq-5", 5], ["eq-10", 10], ["eq-21", 21.097], ["eq-42", 42.195]];
+
+  function riegel(t1, d1) {
+    for (const [id, d2] of DISTS)
+      $(id).textContent = fmtTiempo(t1 * Math.pow(d2 / d1, 1.06));
+  }
+
+  function calc() {
+    const kmh = v => (v > 0 ? (3600 / v).toFixed(1).replace(".", ",") : "—");
+    if (modo === "ritmo") {
+      const d = getDist(), t = getTiempoS();
+      if (!(d > 0) || !(t > 0)) return;
+      const pace = t / d;
+      $("out1-label").textContent = "Ritmo";
+      $("out1").textContent = fmtRitmo(pace);
+      $("out2").textContent = kmh(pace) + " km/h";
+      $("equiv").style.display = "";
+      riegel(t, d);
+    } else if (modo === "tiempo") {
+      const d = getDist(), p = getRitmoS();
+      if (!(d > 0) || !(p > 0)) return;
+      const t = d * p;
+      $("out1-label").textContent = "Tiempo total";
+      $("out1").textContent = fmtTiempo(t);
+      $("out2").textContent = kmh(p) + " km/h";
+      $("equiv").style.display = "";
+      riegel(t, d);
+    } else {
+      const t = getTiempoS(), p = getRitmoS();
+      if (!(t > 0) || !(p > 0)) return;
+      $("out1-label").textContent = "Distancia";
+      $("out1").textContent = (t / p).toFixed(2).replace(".", ",") + " km";
+      $("out2").textContent = kmh(p) + " km/h";
+      $("equiv").style.display = "none";
+    }
+  }
+
+  $("dist-sel").addEventListener("change", () => {
+    $("dist-custom").style.display =
+      $("dist-sel").value === "custom" ? "" : "none";
+    calc();
+  });
+  for (const id of ["dist-custom", "t-h", "t-m", "t-s", "r-m", "r-s"])
+    $(id).addEventListener("input", calc);
+  calc();
+</script>
+</body>
+</html>

@@ -111,6 +111,7 @@
     border-radius:10px;padding:18px}
   .desglose .linea{display:flex;justify-content:space-between;
     padding:6px 0;font-size:.95rem;color:var(--tinta-suave)}
+  .desglose .linea[hidden]{display:none}
   .desglose .linea strong{font-variant-numeric:tabular-nums;color:var(--tinta)}
   .desglose .total{border-top:1px solid var(--linea);margin-top:8px;
     padding-top:12px;font-size:1.05rem}
@@ -179,12 +180,12 @@
       </label>
 
       <div class="desglose" aria-live="polite">
-        <div class="linea">Base imponible <strong id="r-base">1.000,00 €</strong></div>
-        <div class="linea">Cuota de IVA (<span id="r-tipo">21</span>%)
+        <div class="linea"><span>Base imponible</span> <strong id="r-base">1.000,00 €</strong></div>
+        <div class="linea"><span>Cuota de IVA (<span id="r-tipo">21</span>%)</span>
           <strong id="r-cuota">210,00 €</strong></div>
-        <div class="linea" id="fila-recargo" hidden>Recargo de equivalencia
-          (<span id="r-rec-tipo">5,2</span>%) <strong id="r-recargo">0,00 €</strong></div>
-        <div class="linea total">Total con IVA <strong id="r-total">1.210,00 €</strong></div>
+        <div class="linea" id="fila-recargo" hidden><span>Recargo de equivalencia
+          (<span id="r-rec-tipo">5,2</span>%)</span> <strong id="r-recargo">0,00 €</strong></div>
+        <div class="linea total"><span>Total con IVA</span> <strong id="r-total">1.210,00 €</strong></div>
       </div>
     </div>
 
