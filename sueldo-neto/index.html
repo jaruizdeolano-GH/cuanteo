@@ -97,6 +97,16 @@
   .campo input:focus,.campo select:focus{outline:2px solid var(--ambar);
     outline-offset:1px;border-color:var(--ambar)}
 
+  .avanzadas{margin-bottom:20px;border:1px solid var(--linea);
+    border-radius:10px;background:var(--papel)}
+  .avanzadas summary{padding:12px 16px;font-size:.85rem;font-weight:600;
+    color:var(--tinta-suave);cursor:pointer}
+  .avanzadas .fila{padding:0 16px 16px;margin-bottom:0}
+  .avanzadas .fila2{display:grid;grid-template-columns:1fr 1fr;gap:16px;
+    padding:0 16px 16px}
+  .check{display:flex;align-items:center;gap:8px;font-size:.85rem;
+    color:var(--tinta-suave)}
+  .check input{width:16px;height:16px;accent-color:var(--verde)}
   .resultado{background:var(--papel);border:1px dashed var(--linea);
     border-radius:10px;padding:20px}
   .res-grande{display:grid;grid-template-columns:1fr 1fr;gap:20px;
@@ -168,6 +178,42 @@
         </div>
       </div>
 
+      <details class="avanzadas">
+        <summary>Opciones avanzadas: discapacidad, movilidad, pensiones</summary>
+        <div class="fila2">
+          <div class="campo">
+            <label for="disc">Discapacidad del trabajador</label>
+            <select id="disc">
+              <option value="0" selected>Sin discapacidad</option>
+              <option value="33">Grado 33%–64%</option>
+              <option value="65">Grado 65% o más</option>
+            </select>
+          </div>
+          <div class="campo" style="align-self:end">
+            <label class="check" style="margin-bottom:10px">
+              <input type="checkbox" id="asistencia">
+              Movilidad reducida / ayuda de terceros
+            </label>
+            <label class="check">
+              <input type="checkbox" id="movilidad">
+              Movilidad geográfica (acepto empleo en otro municipio)
+            </label>
+          </div>
+        </div>
+        <div class="fila2">
+          <div class="campo">
+            <label for="compensatoria">Pensión compensatoria al excónyuge (€/año)</label>
+            <input type="number" id="compensatoria" value="0" min="0" step="100"
+              inputmode="numeric">
+          </div>
+          <div class="campo">
+            <label for="alimentos">Anualidades por alimentos a hijos (€/año)</label>
+            <input type="number" id="alimentos" value="0" min="0" step="100"
+              inputmode="numeric">
+          </div>
+        </div>
+      </details>
+
       <div class="resultado" aria-live="polite">
         <div class="res-grande">
           <div><span id="lbl-mes">Neto al mes (12 pagas)</span>
@@ -224,9 +270,19 @@
         <details>
           <summary>¿El resultado coincidirá con mi nómina?</summary>
           <p>Aproximadamente. La retención oficial la calcula tu empresa con
-          el algoritmo de la AEAT, que añade factores que aquí no se piden
-          (comunidad autónoma, discapacidad, movilidad, pensiones
-          compensatorias). La cotización sí es prácticamente exacta.</p>
+          el algoritmo completo de la AEAT (regularizaciones, situación
+          familiar detallada). Con las opciones avanzadas cubiertas, la
+          estimación suele quedar muy cerca; la cotización es prácticamente
+          exacta.</p>
+        </details>
+        <details>
+          <summary>¿No depende de mi comunidad autónoma?</summary>
+          <p>La retención en nómina, no: se calcula con la escala estatal del
+          artículo 101 de la LIRPF, uniforme en todo el territorio común. La
+          escala de tu comunidad interviene después, en la declaración anual
+          (ahí puede salirte a devolver o a pagar la diferencia). Excepción:
+          País Vasco y Navarra tienen tablas forales propias y esta
+          calculadora no les es aplicable.</p>
         </details>
         <details>
           <summary>¿Qué pasa si cobro por encima de la base máxima?</summary>
@@ -251,10 +307,11 @@
       </div>
 
       <p class="aviso"><strong>Estimación orientativa.</strong> Cálculo con la
-      escala estatal + autonómica de referencia y las cotizaciones vigentes;
-      la retención definitiva depende de tu comunidad autónoma y
-      circunstancias completas. No constituye asesoramiento fiscal ni
-      laboral. Parámetros actualizados a julio de 2026.</p>
+      escala estatal de retenciones (uniforme en territorio común — no
+      aplicable a País Vasco y Navarra) y las cotizaciones vigentes. La
+      retención definitiva la determina el algoritmo completo de la AEAT.
+      No constituye asesoramiento fiscal ni laboral. Parámetros actualizados
+      a julio de 2026.</p>
     </article>
   </main>
 
@@ -299,25 +356,49 @@
       c.base_max_mensual) * 12;
     const ss = baseCotiz * c.tipo_pct / 100;
 
+    // gastos deducibles: otros 2.000 + movilidad + trabajador activo con discapacidad
+    const disc = $("disc") ? $("disc").value : "0";
+    const asist = $("asistencia") && $("asistencia").checked;
+    let gastos = P.gastos_deducibles_otros;
+    if ($("movilidad") && $("movilidad").checked)
+      gastos += P.movilidad_geografica_gasto;
+    if (disc === "33")
+      gastos += (asist ? P.discapacidad.gasto_trabajador_65
+                       : P.discapacidad.gasto_trabajador_33);
+    if (disc === "65") gastos += P.discapacidad.gasto_trabajador_65;
+
     // rendimiento neto del trabajo
-    let rn = Math.max(bruto - ss - P.gastos_deducibles_otros, 0);
+    let rn = Math.max(bruto - ss - gastos, 0);
     const r = P.reduccion_trabajo;
     let red = 0;
     if (rn <= r.rn_limite_pleno) red = r.importe_max;
     else red = Math.max(r.importe_max - r.pendiente * (rn - r.rn_limite_pleno), 0);
     const baseLiq = Math.max(rn - red, 0);
 
-    // minimo personal y familiar
+    // pension compensatoria reduce la base
+    const comp = parseFloat($("compensatoria") ? $("compensatoria").value : 0) || 0;
+    const baseFinal = Math.max(baseLiq - comp, 0);
+
+    // minimo personal y familiar (+ discapacidad)
     let minimo = P.minimo_personal;
     for (let i = 0; i < Math.min(hijos, 4); i++)
       minimo += P.minimo_descendientes[i];
-    if (hijos >= 4) {
-      // 4 o mas: el selector agrupa; anadimos solo hasta el 4o
-    }
+    if (disc === "33") minimo += P.discapacidad.minimo_33;
+    if (disc === "65") minimo += P.discapacidad.minimo_65 + P.discapacidad.asistencia;
+    else if (disc === "33" && asist) minimo += P.discapacidad.asistencia;
 
+    // anualidades por alimentos: escala separada + incremento del minimo
+    const alim = parseFloat($("alimentos") ? $("alimentos").value : 0) || 0;
+    let cuotaInt, minimoCalc = minimo;
+    if (alim > 0 && alim < baseFinal) {
+      cuotaInt = escala(alim, P.escala.tramos)
+        + escala(baseFinal - alim, P.escala.tramos);
+      minimoCalc += P.alimentos_hijos_incremento_minimo;
+    } else {
+      cuotaInt = escala(baseFinal, P.escala.tramos);
+    }
     const cuota = Math.max(
-      escala(baseLiq, P.escala.tramos) -
-      escala(Math.min(minimo, baseLiq), P.escala.tramos), 0);
+      cuotaInt - escala(Math.min(minimoCalc, baseFinal), P.escala.tramos), 0);
 
     const neto = bruto - ss - cuota;
     const mes = neto / pagas;
@@ -341,7 +422,8 @@
         "<p>No se han podido cargar los parámetros. Recarga la página.</p>";
     });
 
-  for (const id of ["bruto", "pagas", "hijos"])
+  for (const id of ["bruto", "pagas", "hijos", "disc", "asistencia",
+                    "movilidad", "compensatoria", "alimentos"])
     $(id).addEventListener("input", calc);
 </script>
   <!-- Cloudflare Web Analytics -->
