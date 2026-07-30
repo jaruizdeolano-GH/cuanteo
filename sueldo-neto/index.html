@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de sueldo neto 2026 — de bruto a neto con desglose | Cuanteo</title>
+<meta name="description" content="Calcula tu sueldo neto a partir del bruto anual: cotizaciones a la Seguridad Social, retención de IRPF estimada y neto mensual en 12 o 14 pagas. Gratis y al momento.">
+<link rel="canonical" href="https://cuanteo.com/sueldo-neto/">
+<meta property="og:title" content="Calculadora de sueldo neto — Cuanteo">
+<meta property="og:description" content="De bruto a neto: cotizaciones, IRPF estimado y tu nómina en 12 o 14 pagas.">
+<meta property="og:url" content="https://cuanteo.com/sueldo-neto/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Calculadora de sueldo neto",
+      "url": "https://cuanteo.com/sueldo-neto/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+      "inLanguage": "es"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cuánto se queda Hacienda y la Seguridad Social de mi sueldo?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Del sueldo bruto se descuentan las cotizaciones del trabajador (en torno al 6,5%: contingencias comunes, desempleo, formación y MEI) y la retención de IRPF, que depende del importe, la comunidad autónoma y las circunstancias personales y familiares."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Es lo mismo cobrar en 12 que en 14 pagas?",
+          "acceptedAnswer": {"@type": "Answer", "text": "El neto anual es el mismo; solo cambia el reparto. En 14 pagas la mensualidad ordinaria es menor porque dos pagas extra completan el año; en 12 pagas las extras van prorrateadas cada mes."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué mi retención real puede ser distinta a la estimada?",
+          "acceptedAnswer": {"@type": "Answer", "text": "La retención exacta la calcula la empresa con el algoritmo oficial de la AEAT, que incorpora la escala de tu comunidad autónoma, la situación familiar completa, discapacidad, pensiones compensatorias o movilidad geográfica, entre otros factores. Esta calculadora ofrece una estimación con la escala de referencia."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Los hijos reducen la retención?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Sí: los descendientes menores de 25 años que conviven contigo aumentan el mínimo personal y familiar, lo que reduce la cuota y por tanto la retención de IRPF."}
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Cuanteo", "item": "https://cuanteo.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Sueldo neto", "item": "https://cuanteo.com/sueldo-neto/"}
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --papel:#FAFAF7; --tinta:#1C2B36; --tinta-suave:#5A6B76;
+    --ambar:#E8A100; --verde:#2E6E63; --linea:#E3E2DC; --carta:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--papel);color:var(--tinta);
+    font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:baseline}
+  .marca{font-family:'Archivo';font-weight:900;font-size:1.25rem;
+    letter-spacing:-.02em;text-decoration:none}
+  .marca span{color:var(--ambar)}
+  nav a{font-size:.85rem;color:var(--tinta-suave);text-decoration:none}
+  h1{font-family:'Archivo';font-weight:900;font-stretch:85%;
+    font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.1;
+    letter-spacing:-.02em;margin:14px 0 8px}
+  .sub{color:var(--tinta-suave);max-width:58ch;margin-bottom:26px}
+
+  .calc{background:var(--carta);border:1px solid var(--linea);
+    border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(28,43,54,.05);
+    margin-bottom:40px}
+  .fila{display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:16px;
+    margin-bottom:20px}
+  .campo label{display:block;font-size:.8rem;font-weight:600;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .campo input,.campo select{width:100%;padding:12px;font-size:1.05rem;
+    font-family:inherit;border:1px solid var(--linea);border-radius:9px;
+    background:var(--papel)}
+  .campo input:focus,.campo select:focus{outline:2px solid var(--ambar);
+    outline-offset:1px;border-color:var(--ambar)}
+
+  .resultado{background:var(--papel);border:1px dashed var(--linea);
+    border-radius:10px;padding:20px}
+  .res-grande{display:grid;grid-template-columns:1fr 1fr;gap:20px;
+    margin-bottom:14px}
+  .res-grande div span{display:block;font-size:.78rem;font-weight:600;
+    color:var(--tinta-suave)}
+  .res-grande div strong{font-family:'Archivo';font-weight:800;
+    font-size:1.7rem;color:var(--verde);font-variant-numeric:tabular-nums}
+  .res-detalle{border-top:1px solid var(--linea);padding-top:12px}
+  .res-detalle .linea{display:flex;justify-content:space-between;
+    padding:4px 0;font-size:.9rem;color:var(--tinta-suave)}
+  .res-detalle .linea strong{font-variant-numeric:tabular-nums;color:var(--tinta)}
+
+  article h2{font-family:'Archivo';font-weight:800;font-size:1.35rem;
+    letter-spacing:-.01em;margin:34px 0 10px}
+  article p{color:var(--tinta-suave);margin-bottom:14px;max-width:68ch}
+  article table{border-collapse:collapse;margin:8px 0 18px;font-size:.92rem}
+  article th,article td{border:1px solid var(--linea);padding:9px 14px;
+    text-align:left;font-variant-numeric:tabular-nums}
+  article th{background:var(--carta);font-weight:600}
+  article td{color:var(--tinta-suave)}
+  .faq details{border-bottom:1px solid var(--linea);padding:14px 0}
+  .faq summary{font-weight:600;cursor:pointer}
+  .faq p{margin-top:8px}
+  .aviso{font-size:.8rem;color:var(--tinta-suave);border-left:3px solid
+    var(--ambar);padding:8px 14px;margin:30px 0}
+  footer{border-top:1px solid var(--linea);margin-top:44px;
+    padding:28px 0 40px;display:flex;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;font-size:.82rem;color:var(--tinta-suave)}
+  @media (max-width:680px){.fila{grid-template-columns:1fr}
+    .res-grande{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="marca" href="/">cuanteo<span>.</span></a>
+    <nav><a href="/">todas las herramientas</a></nav>
+  </header>
+
+  <main>
+    <h1>Calculadora de sueldo neto</h1>
+    <p class="sub">De bruto a neto: cuánto se descuenta de cotizaciones y de
+    IRPF, y cuánto te queda al mes en 12 o 14 pagas.</p>
+
+    <div class="calc">
+      <div class="fila">
+        <div class="campo">
+          <label for="bruto">Sueldo bruto anual (€)</label>
+          <input type="number" id="bruto" value="30000" min="0" step="500"
+            inputmode="numeric">
+        </div>
+        <div class="campo">
+          <label for="pagas">Nº de pagas</label>
+          <select id="pagas">
+            <option value="12" selected>12 pagas</option>
+            <option value="14">14 pagas</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="hijos">Hijos a tu cargo (&lt;25 años)</label>
+          <select id="hijos">
+            <option value="0" selected>Sin hijos</option>
+            <option value="1">1 hijo</option>
+            <option value="2">2 hijos</option>
+            <option value="3">3 hijos</option>
+            <option value="4">4 o más</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="resultado" aria-live="polite">
+        <div class="res-grande">
+          <div><span id="lbl-mes">Neto al mes (12 pagas)</span>
+            <strong id="r-mes">—</strong></div>
+          <div><span>Neto al año</span><strong id="r-anual">—</strong></div>
+        </div>
+        <div class="res-detalle">
+          <div class="linea"><span>Cotizaciones Seguridad Social
+            (<span id="r-ss-pct">6,5</span>%)</span>
+            <strong id="r-ss">—</strong></div>
+          <div class="linea"><span>Retención IRPF estimada
+            (<span id="r-irpf-pct">—</span>%)</span>
+            <strong id="r-irpf">—</strong></div>
+          <div class="linea"><span>Total descuentos</span>
+            <strong id="r-desc">—</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <article>
+      <h2>Qué se descuenta de tu nómina</h2>
+      <p>Del sueldo bruto salen dos descuentos. Primero, las
+      <strong>cotizaciones del trabajador</strong> a la Seguridad Social —
+      contingencias comunes (4,70%), desempleo (1,55%), formación (0,10%) y
+      el MEI (0,15%): en torno al 6,5% del salario, con tope en la base
+      máxima de cotización. Segundo, la <strong>retención de IRPF</strong>,
+      un anticipo del impuesto que tu empresa ingresa por ti y que depende
+      del importe, de tu comunidad autónoma y de tus circunstancias
+      personales y familiares.</p>
+
+      <h2>Netos orientativos por sueldo bruto</h2>
+      <table>
+        <tr><th>Bruto anual</th><th>Neto anual aprox.</th><th>Al mes (12 pagas)</th></tr>
+        <tr><td>20.000 €</td><td>≈ 17.300 €</td><td>≈ 1.445 €</td></tr>
+        <tr><td>25.000 €</td><td>≈ 20.400 €</td><td>≈ 1.700 €</td></tr>
+        <tr><td>30.000 €</td><td>≈ 23.100 €</td><td>≈ 1.930 €</td></tr>
+        <tr><td>40.000 €</td><td>≈ 29.300 €</td><td>≈ 2.440 €</td></tr>
+        <tr><td>50.000 €</td><td>≈ 35.100 €</td><td>≈ 2.925 €</td></tr>
+      </table>
+      <p>Los valores son estimaciones sin hijos, con la escala de referencia:
+      tu caso concreto puede variar algunos cientos de euros al año según la
+      comunidad y tu situación.</p>
+
+      <h2>Por qué "un 25% de IRPF" es un mito</h2>
+      <p>El IRPF es progresivo por tramos: los primeros euros tributan al
+      19% y solo lo que supera cada umbral paga el tipo del tramo siguiente.
+      Nadie paga "el 30% de todo su sueldo" por entrar en el tramo del 30%.
+      Además, el mínimo personal (5.550 €) y los mínimos por hijos dejan una
+      parte libre de tributación — por eso dos personas con el mismo bruto y
+      distinta familia cobran netos diferentes.</p>
+
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        <details>
+          <summary>¿El resultado coincidirá con mi nómina?</summary>
+          <p>Aproximadamente. La retención oficial la calcula tu empresa con
+          el algoritmo de la AEAT, que añade factores que aquí no se piden
+          (comunidad autónoma, discapacidad, movilidad, pensiones
+          compensatorias). La cotización sí es prácticamente exacta.</p>
+        </details>
+        <details>
+          <summary>¿Qué pasa si cobro por encima de la base máxima?</summary>
+          <p>Las cotizaciones se calculan solo hasta la base máxima de
+          cotización — por encima de ella, el exceso no cotiza (y tampoco
+          genera más pensión). La retención de IRPF sí se aplica a todo el
+          salario.</p>
+        </details>
+        <details>
+          <summary>¿La paga extra lleva retención?</summary>
+          <p>Sí — el tipo de retención se calcula sobre el total anual, así
+          que las extras llegan con el mismo porcentaje retenido que el resto
+          de la nómina (y sin cotización si las extras están prorrateadas en
+          las bases mensuales).</p>
+        </details>
+        <details>
+          <summary>¿Este cálculo vale para autónomos?</summary>
+          <p>No — los autónomos cotizan por tramos de rendimiento y tributan
+          por estimación directa u objetiva, un esquema distinto. Está en
+          nuestra lista de próximas calculadoras.</p>
+        </details>
+      </div>
+
+      <p class="aviso"><strong>Estimación orientativa.</strong> Cálculo con la
+      escala estatal + autonómica de referencia y las cotizaciones vigentes;
+      la retención definitiva depende de tu comunidad autónoma y
+      circunstancias completas. No constituye asesoramiento fiscal ni
+      laboral. Parámetros actualizados a julio de 2026.</p>
+    </article>
+  </main>
+
+  <footer>
+    <span>© 2026 Cuanteo · Arlobi Consulting SLNE</span>
+    <span>
+      <a href="/aviso-legal/">Aviso legal</a> ·
+      <a href="/privacidad/">Privacidad</a> ·
+      <a href="/cookies/">Cookies</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+  const fmt = new Intl.NumberFormat("es-ES",
+    {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const $ = id => document.getElementById(id);
+  let P = null;
+
+  function escala(base, tramos) {
+    let cuota = 0, prev = 0;
+    for (const t of tramos) {
+      const techo = t.hasta === null ? Infinity : t.hasta;
+      if (base > prev) {
+        cuota += (Math.min(base, techo) - prev) * t.tipo / 100;
+        prev = techo;
+      } else break;
+    }
+    return cuota;
+  }
+
+  function calc() {
+    if (!P) return;
+    const bruto = parseFloat($("bruto").value);
+    const pagas = parseInt($("pagas").value);
+    const hijos = parseInt($("hijos").value);
+    if (!isFinite(bruto) || bruto < 0) return;
+
+    // cotizaciones: sobre base topada
+    const c = P.cotizacion_trabajador;
+    const baseCotiz = Math.min(Math.max(bruto / 12, 0),
+      c.base_max_mensual) * 12;
+    const ss = baseCotiz * c.tipo_pct / 100;
+
+    // rendimiento neto del trabajo
+    let rn = Math.max(bruto - ss - P.gastos_deducibles_otros, 0);
+    const r = P.reduccion_trabajo;
+    let red = 0;
+    if (rn <= r.rn_limite_pleno) red = r.importe_max;
+    else red = Math.max(r.importe_max - r.pendiente * (rn - r.rn_limite_pleno), 0);
+    const baseLiq = Math.max(rn - red, 0);
+
+    // minimo personal y familiar
+    let minimo = P.minimo_personal;
+    for (let i = 0; i < Math.min(hijos, 4); i++)
+      minimo += P.minimo_descendientes[i];
+    if (hijos >= 4) {
+      // 4 o mas: el selector agrupa; anadimos solo hasta el 4o
+    }
+
+    const cuota = Math.max(
+      escala(baseLiq, P.escala.tramos) -
+      escala(Math.min(minimo, baseLiq), P.escala.tramos), 0);
+
+    const neto = bruto - ss - cuota;
+    const mes = neto / pagas;
+    const tipo = bruto > 0 ? (cuota / bruto * 100) : 0;
+
+    $("lbl-mes").textContent = `Neto al mes (${pagas} pagas)`;
+    $("r-mes").textContent = fmt.format(mes) + " €";
+    $("r-anual").textContent = fmt.format(neto) + " €";
+    $("r-ss-pct").textContent = String(c.tipo_pct).replace(".", ",");
+    $("r-ss").textContent = "−" + fmt.format(ss) + " €";
+    $("r-irpf-pct").textContent = fmt.format(tipo).replace(",00", "");
+    $("r-irpf").textContent = "−" + fmt.format(cuota) + " €";
+    $("r-desc").textContent = "−" + fmt.format(ss + cuota) + " €";
+  }
+
+  fetch("params.json")
+    .then(r => r.json())
+    .then(p => { P = p; calc(); })
+    .catch(() => {
+      document.querySelector(".resultado").innerHTML =
+        "<p>No se han podido cargar los parámetros. Recarga la página.</p>";
+    });
+
+  for (const id of ["bruto", "pagas", "hijos"])
+    $(id).addEventListener("input", calc);
+</script>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f1821aff041642088cf76fb9e051f413"}'></script>
+</body>
+</html>

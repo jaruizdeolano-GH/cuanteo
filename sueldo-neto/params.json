@@ -1,0 +1,30 @@
+{
+  "vigencia": "Escala estatal + autonomica de referencia y cotizaciones segun ultimos valores publicados. La retencion definitiva varia por comunidad autonoma y circunstancias personales. Actualizado: julio 2026. REVISAR CADA ENERO.",
+  "cotizacion_trabajador": {
+    "nota": "Contingencias comunes 4,70 + desempleo 1,55 + formacion 0,10 + MEI 0,15",
+    "tipo_pct": 6.5,
+    "base_max_mensual": 4909.5,
+    "base_min_mensual": 1381.2
+  },
+  "gastos_deducibles_otros": 2000,
+  "reduccion_trabajo": {
+    "nota": "Reduccion por obtencion de rendimientos del trabajo",
+    "rn_limite_pleno": 14852,
+    "importe_max": 7302,
+    "pendiente": 1.75
+  },
+  "escala": {
+    "nota": "Tramos agregados estatal + autonomica de referencia",
+    "tramos": [
+      {"hasta": 12450, "tipo": 19},
+      {"hasta": 20200, "tipo": 24},
+      {"hasta": 35200, "tipo": 30},
+      {"hasta": 60000, "tipo": 37},
+      {"hasta": 300000, "tipo": 45},
+      {"hasta": null, "tipo": 47}
+    ]
+  },
+  "minimo_personal": 5550,
+  "minimo_descendientes": [2400, 2700, 4000, 4500],
+  "nota_descendientes": "Por orden: 1o, 2o, 3o, 4o y siguientes; se aplica integro (sin prorrateo entre progenitores) como simplificacion declarada"
+}
