@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indemnización por vuelo retrasado o cancelado — calcula lo que te deben | Cuanteo</title>
+<meta name="description" content="¿Vuelo retrasado más de 3 horas, cancelado u overbooking? Calcula tu indemnización según la normativa europea: 250, 400 o 600 €. Con los pasos para reclamar gratis y el plazo real en España.">
+<link rel="canonical" href="https://cuanteo.com/indemnizacion-vuelo/">
+<meta property="og:title" content="Indemnización por vuelo retrasado — Cuanteo">
+<meta property="og:description" content="Calcula si te corresponden 250, 400 o 600 € por tu vuelo y cómo reclamarlos gratis.">
+<meta property="og:url" content="https://cuanteo.com/indemnizacion-vuelo/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Calculadora de indemnización por vuelo",
+      "url": "https://cuanteo.com/indemnizacion-vuelo/",
+      "applicationCategory": "TravelApplication",
+      "operatingSystem": "Web",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+      "inLanguage": "es"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cuánto me corresponde por un vuelo retrasado?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Si llegas a tu destino final con 3 horas o más de retraso: 250 € en vuelos de hasta 1.500 km, 400 € entre 1.500 y 3.500 km (o más largos dentro de la UE) y 600 € en vuelos de más de 3.500 km fuera de la UE, según el Reglamento europeo 261/2004."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuál es el plazo para reclamar un vuelo en España?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Cinco años desde el vuelo, según la jurisprudencia del Tribunal Supremo. Muchos pasajeros creen que el plazo es de meses y renuncian a indemnizaciones que siguen vigentes."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puedo reclamar si la aerolínea alega circunstancias extraordinarias?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Las circunstancias verdaderamente extraordinarias (meteorología severa, restricciones de control aéreo) eximen de compensación. Pero el Tribunal de Justicia de la UE ha establecido que las huelgas del propio personal de la aerolínea y la mayoría de averías técnicas NO son extraordinarias, así que en esos casos sí se puede reclamar."}
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo reclamo gratis, sin ceder comisión?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Primero por escrito a la aerolínea (formulario de reclamaciones). Si no responde en un mes o rechaza, reclamación gratuita ante AESA (Agencia Estatal de Seguridad Aérea), cuya resolución es vinculante para la aerolínea desde 2023 en las materias de su competencia."}
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Cuanteo", "item": "https://cuanteo.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Indemnización por vuelo", "item": "https://cuanteo.com/indemnizacion-vuelo/"}
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --papel:#FAFAF7; --tinta:#1C2B36; --tinta-suave:#5A6B76;
+    --ambar:#E8A100; --verde:#2E6E63; --rojo:#C4553B;
+    --linea:#E3E2DC; --carta:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--papel);color:var(--tinta);
+    font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  header{padding:22px 0;display:flex;justify-content:space-between;align-items:baseline}
+  .marca{font-family:'Archivo';font-weight:900;font-size:1.25rem;
+    letter-spacing:-.02em;text-decoration:none}
+  .marca span{color:var(--ambar)}
+  nav a{font-size:.85rem;color:var(--tinta-suave);text-decoration:none}
+  h1{font-family:'Archivo';font-weight:900;font-stretch:85%;
+    font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.1;
+    letter-spacing:-.02em;margin:14px 0 8px}
+  .sub{color:var(--tinta-suave);max-width:58ch;margin-bottom:26px}
+
+  .calc{background:var(--carta);border:1px solid var(--linea);
+    border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(28,43,54,.05);
+    margin-bottom:40px}
+  fieldset{border:0;margin-bottom:20px}
+  legend{font-size:.8rem;font-weight:600;color:var(--tinta-suave);
+    margin-bottom:8px}
+  .opciones{display:flex;gap:8px;flex-wrap:wrap}
+  .opciones label{border:1px solid var(--linea);border-radius:999px;
+    padding:8px 16px;font-size:.88rem;cursor:pointer;background:var(--papel)}
+  .opciones input{position:absolute;opacity:0;pointer-events:none}
+  .opciones label:has(input:checked){background:var(--tinta);color:#fff;
+    border-color:var(--tinta)}
+  .opciones label:has(input:focus-visible){outline:2px solid var(--ambar)}
+  .pista{font-size:.74rem;color:var(--tinta-suave);margin-top:6px}
+  [hidden]{display:none !important}
+
+  .resultado{background:var(--papel);border:1px dashed var(--linea);
+    border-radius:10px;padding:20px}
+  .veredicto{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+  .veredicto span{font-size:.78rem;font-weight:600;color:var(--tinta-suave)}
+  .veredicto strong{font-family:'Archivo';font-weight:900;font-size:2.2rem;
+    color:var(--verde);font-variant-numeric:tabular-nums}
+  .veredicto strong.no{color:var(--rojo);font-size:1.4rem}
+  .notas{margin-top:12px;border-top:1px solid var(--linea);padding-top:12px}
+  .notas li{font-size:.88rem;color:var(--tinta-suave);margin:6px 0 6px 18px}
+
+  article h2{font-family:'Archivo';font-weight:800;font-size:1.35rem;
+    letter-spacing:-.01em;margin:34px 0 10px}
+  article p{color:var(--tinta-suave);margin-bottom:14px;max-width:68ch}
+  article ol{margin:0 0 16px 22px}
+  article ol li{color:var(--tinta-suave);margin-bottom:8px}
+  article table{border-collapse:collapse;margin:8px 0 18px;font-size:.92rem}
+  article th,article td{border:1px solid var(--linea);padding:9px 14px;
+    text-align:left;font-variant-numeric:tabular-nums}
+  article th{background:var(--carta);font-weight:600}
+  article td{color:var(--tinta-suave)}
+  .faq details{border-bottom:1px solid var(--linea);padding:14px 0}
+  .faq summary{font-weight:600;cursor:pointer}
+  .faq p{margin-top:8px}
+  .aviso{font-size:.8rem;color:var(--tinta-suave);border-left:3px solid
+    var(--linea);padding:8px 14px;margin:30px 0}
+  footer{border-top:1px solid var(--linea);margin-top:44px;
+    padding:28px 0 40px;display:flex;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;font-size:.82rem;color:var(--tinta-suave)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="marca" href="/">cuanteo<span>.</span></a>
+    <nav><a href="/">todas las herramientas</a></nav>
+  </header>
+
+  <main>
+    <h1>Indemnización por vuelo retrasado o cancelado</h1>
+    <p class="sub">Responde cuatro preguntas y sabrás si la normativa europea
+    te reconoce 250, 400 o 600 € — y cómo reclamarlos gratis, sin ceder
+    comisión a nadie.</p>
+
+    <div class="calc">
+      <fieldset>
+        <legend>¿Qué pasó con tu vuelo?</legend>
+        <div class="opciones" id="q-tipo">
+          <label><input type="radio" name="tipo" value="retraso" checked>Retraso</label>
+          <label><input type="radio" name="tipo" value="cancelacion">Cancelación</label>
+          <label><input type="radio" name="tipo" value="overbooking">Overbooking (no me dejaron embarcar)</label>
+        </div>
+      </fieldset>
+
+      <fieldset id="f-retraso">
+        <legend>¿Con cuánto retraso llegaste a tu destino final?</legend>
+        <div class="opciones">
+          <label><input type="radio" name="retraso" value="menos3">Menos de 3 horas</label>
+          <label><input type="radio" name="retraso" value="mas3" checked>3 horas o más</label>
+        </div>
+        <p class="pista">Cuenta la llegada al destino final del billete (con
+        escalas incluidas), no la salida.</p>
+      </fieldset>
+
+      <fieldset id="f-aviso" hidden>
+        <legend>¿Con cuánta antelación te avisaron de la cancelación?</legend>
+        <div class="opciones">
+          <label><input type="radio" name="aviso" value="mas14">14 días o más</label>
+          <label><input type="radio" name="aviso" value="menos14" checked>Menos de 14 días</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>¿Qué distancia tenía el vuelo?</legend>
+        <div class="opciones" id="q-dist">
+          <label><input type="radio" name="dist" value="corta" checked>Hasta 1.500 km <small>(Madrid–París, Bilbao–Londres)</small></label>
+          <label><input type="radio" name="dist" value="media">1.500–3.500 km <small>(Madrid–Estambul, Canarias–Berlín)</small></label>
+          <label><input type="radio" name="dist" value="larga">Más de 3.500 km <small>(Madrid–Nueva York, Barcelona–Buenos Aires)</small></label>
+        </div>
+      </fieldset>
+
+      <fieldset id="f-ue" hidden>
+        <legend>¿Origen y destino estaban dentro de la UE?</legend>
+        <div class="opciones">
+          <label><input type="radio" name="ue" value="si">Sí, ambos en la UE</label>
+          <label><input type="radio" name="ue" value="no" checked>No (uno fuera de la UE)</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>¿La aerolínea alegó circunstancias extraordinarias?</legend>
+        <div class="opciones">
+          <label><input type="radio" name="extra" value="no" checked>No / no lo sé</label>
+          <label><input type="radio" name="extra" value="meteo">Sí: meteorología o control aéreo</label>
+          <label><input type="radio" name="extra" value="huelga">Sí: huelga de su personal o avería</label>
+        </div>
+      </fieldset>
+
+      <div class="resultado" aria-live="polite">
+        <div class="veredicto">
+          <span>Indemnización que te corresponde</span>
+          <strong id="importe">250 €</strong>
+        </div>
+        <ul class="notas" id="notas"></ul>
+      </div>
+    </div>
+
+    <article>
+      <h2>Los importes que fija la normativa europea</h2>
+      <p>El Reglamento (CE) 261/2004 protege a todo pasajero que sale de un
+      aeropuerto de la UE (o llega a la UE con una aerolínea comunitaria).
+      Los importes no dependen del precio del billete:</p>
+      <table>
+        <tr><th>Distancia del vuelo</th><th>Indemnización</th></tr>
+        <tr><td>Hasta 1.500 km</td><td>250 €</td></tr>
+        <tr><td>1.500 – 3.500 km, y vuelos más largos dentro de la UE</td><td>400 €</td></tr>
+        <tr><td>Más de 3.500 km (fuera de la UE)</td><td>600 €</td></tr>
+      </table>
+      <p>Se cobran por pasajero — una familia de cuatro en un Madrid–Nueva
+      York con 5 horas de retraso puede reclamar 2.400 €. Además de la
+      indemnización, desde 2 horas de espera tienes derecho a
+      <strong>asistencia</strong>: comida, bebida, comunicaciones y hotel con
+      transporte si hay pernocta — la aerolínea debe dártelo aunque la causa
+      sea extraordinaria.</p>
+
+      <h2>Cómo reclamar gratis, paso a paso</h2>
+      <ol>
+        <li><strong>Reclama por escrito a la aerolínea</strong> (su formulario
+        web o la hoja de reclamaciones del aeropuerto), citando el Reglamento
+        261/2004, con número de vuelo y tarjeta de embarque. Guarda todos los
+        justificantes, también de gastos.</li>
+        <li><strong>Si no responde en un mes o rechaza:</strong> reclamación
+        gratuita ante <strong>AESA</strong> (Agencia Estatal de Seguridad
+        Aérea, sede electrónica). Desde 2023 sus resoluciones sobre estas
+        compensaciones son vinculantes para la aerolínea.</li>
+        <li><strong>Alternativas si prefieres no gestionarlo:</strong> las
+        empresas de reclamación lo tramitan a cambio de una comisión
+        (habitualmente 25–50% de lo recuperado), y queda la vía judicial —
+        los juzgados de lo mercantil dan la razón al pasajero en la gran
+        mayoría de estos casos.</li>
+      </ol>
+
+      <h2>Lo que las aerolíneas no suelen contarte</h2>
+      <p><strong>El plazo en España es de 5 años</strong> — no de semanas ni
+      meses. Puedes reclamar hoy aquel vuelo de hace tres veranos.
+      <strong>Las huelgas del propio personal de la aerolínea no son
+      "circunstancias extraordinarias"</strong> según el Tribunal de Justicia
+      de la UE, ni la mayoría de averías técnicas: si te denegaron por eso,
+      reclama. Y el retraso que cuenta es el de <strong>llegada al destino
+      final</strong>: perder una conexión por un primer vuelo tardío también
+      genera derecho si llegas 3+ horas tarde al final del trayecto.</p>
+
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        <details>
+          <summary>¿Vale para cualquier aerolínea, también low-cost?</summary>
+          <p>Sí. El reglamento aplica igual a Ryanair que a Iberia: cubre todo
+          vuelo que despegue de la UE, y los que aterrizan en la UE si la
+          aerolínea es comunitaria. Las low-cost pagan las mismas cuantías.</p>
+        </details>
+        <details>
+          <summary>¿Y si acepté un bono o vale de la aerolínea?</summary>
+          <p>Un vale solo sustituye a la indemnización si lo aceptaste
+          expresamente por escrito conociendo tus derechos. La asistencia
+          (comida, hotel) nunca descuenta la compensación.</p>
+        </details>
+        <details>
+          <summary>¿Puedo reclamar gastos además de la indemnización?</summary>
+          <p>Sí: los daños adicionales justificados (hotel que perdiste, otro
+          transporte, comidas no atendidas) se reclaman aparte, por la vía
+          del Convenio de Montreal o consumo. Guarda tickets.</p>
+        </details>
+        <details>
+          <summary>¿Cuándo NO hay indemnización?</summary>
+          <p>Con retrasos menores de 3 horas, cancelaciones avisadas con 14+
+          días, o circunstancias verdaderamente extraordinarias (temporal,
+          cierre del espacio aéreo, huelga de controladores). Aun así, la
+          asistencia y el reembolso o transporte alternativo siguen siendo
+          obligatorios.</p>
+        </details>
+      </div>
+
+      <p class="aviso">Herramienta informativa basada en el Reglamento (CE)
+      261/2004 y la jurisprudencia del TJUE y del Tribunal Supremo. No
+      constituye asesoramiento jurídico; cada caso tiene circunstancias
+      propias.</p>
+    </article>
+  </main>
+
+  <footer>
+    <span>© 2026 Cuanteo · Arlobi Consulting SLNE</span>
+    <span>
+      <a href="/aviso-legal/">Aviso legal</a> ·
+      <a href="/privacidad/">Privacidad</a> ·
+      <a href="/cookies/">Cookies</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+  const $ = s => document.querySelector(s);
+  const val = n => (document.querySelector(`input[name=${n}]:checked`) || {}).value;
+
+  function calc() {
+    const tipo = val("tipo"), dist = val("dist");
+    $("#f-retraso").hidden = tipo !== "retraso";
+    $("#f-aviso").hidden = tipo !== "cancelacion";
+    $("#f-ue").hidden = dist !== "larga";
+
+    const notas = [];
+    let importe = 0, con_derecho = true;
+
+    if (tipo === "retraso" && val("retraso") === "menos3") {
+      con_derecho = false;
+      notas.push("Con menos de 3 horas de retraso en destino no hay " +
+        "indemnización — pero desde 2 horas la aerolínea debe darte " +
+        "asistencia (comida, bebida, comunicaciones).");
+    }
+    if (tipo === "cancelacion" && val("aviso") === "mas14") {
+      con_derecho = false;
+      notas.push("Avisada con 14 días o más, la cancelación no genera " +
+        "indemnización; sí el reembolso íntegro o un transporte alternativo.");
+    }
+
+    if (con_derecho) {
+      if (dist === "corta") importe = 250;
+      else if (dist === "media") importe = 400;
+      else importe = (val("ue") === "si") ? 400 : 600;
+    }
+
+    const extra = val("extra");
+    if (con_derecho && extra === "meteo") {
+      notas.push("Ojo: la meteorología severa y las restricciones de " +
+        "control aéreo sí suelen ser circunstancias extraordinarias — la " +
+        "indemnización puede decaer, aunque la asistencia se mantiene. " +
+        "Pide a la aerolínea prueba concreta de la causa.");
+    }
+    if (con_derecho && extra === "huelga") {
+      notas.push("Buena noticia: el TJUE ha establecido que las huelgas " +
+        "del propio personal y la mayoría de averías técnicas NO son " +
+        "extraordinarias. Si te denegaron por eso, reclama igualmente.");
+    }
+    if (con_derecho && importe > 0) {
+      notas.push("Importe por pasajero. Plazo para reclamar en España: " +
+        "5 años desde el vuelo.");
+      notas.push("Primero gratis: reclamación a la aerolínea y, si no " +
+        "responde en un mes, a AESA (resolución vinculante).");
+    }
+
+    const out = $("#importe");
+    if (con_derecho && importe > 0) {
+      out.textContent = importe + " €";
+      out.classList.remove("no");
+    } else {
+      out.textContent = "Sin indemnización en este supuesto";
+      out.classList.add("no");
+    }
+    $("#notas").innerHTML = notas.map(n => `<li>${n}</li>`).join("");
+  }
+
+  document.querySelectorAll("input[type=radio]")
+    .forEach(r => r.addEventListener("change", calc));
+  calc();
+</script>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f1821aff041642088cf76fb9e051f413"}'></script>
+</body>
+</html>
