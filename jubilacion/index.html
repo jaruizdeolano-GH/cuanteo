@@ -112,6 +112,15 @@
   .alerta{margin-top:12px;font-size:.83rem;color:#8a5a00;background:#FCF3DC;
     border-radius:8px;padding:10px 14px}
   .alerta[hidden]{display:none}
+  .cta-box{margin-top:16px;border-top:1px solid var(--linea);padding-top:16px;
+    display:flex;justify-content:space-between;align-items:center;gap:16px;
+    flex-wrap:wrap}
+  .cta-box p{font-size:.9rem;color:var(--tinta-suave);max-width:48ch;margin:0}
+  .cta-box .micro{display:block;font-size:.7rem;margin-top:4px;opacity:.8}
+  .cta-btn{display:inline-block;background:var(--verde);color:#fff;
+    font-weight:700;font-size:.92rem;padding:11px 18px;border-radius:9px;
+    text-decoration:none;white-space:nowrap}
+  .cta-btn:hover{filter:brightness(1.08)}
 
   article h2{font-family:'Archivo';font-weight:800;font-size:1.35rem;
     letter-spacing:-.01em;margin:34px 0 10px}
@@ -167,6 +176,23 @@
         </div>
       </div>
 
+      <div class="fila" style="grid-template-columns:1.4fr .8fr">
+        <div class="campo">
+          <label for="modalidad">¿Cómo llegarías a la jubilación?</label>
+          <select id="modalidad">
+            <option value="ordinaria" selected>A mi edad legal (ordinaria)</option>
+            <option value="voluntaria">Anticipada por decisión propia (hasta 2 años antes)</option>
+            <option value="involuntaria">Anticipada tras despido involuntario (hasta 4 años antes)</option>
+            <option value="demorada">Demorada: seguir trabajando más allá</option>
+          </select>
+        </div>
+        <div class="campo" id="c-meses" hidden>
+          <label for="meses" id="lbl-meses">Meses de anticipo</label>
+          <input type="number" id="meses" value="24" min="1" max="24"
+            inputmode="numeric">
+        </div>
+      </div>
+
       <div class="resultado" aria-live="polite">
         <div class="res-grande">
           <div><span>Edad legal de jubilación</span>
@@ -183,9 +209,12 @@
             <strong id="r-pct">—</strong></div>
           <div class="linea"><span>Base reguladora estimada</span>
             <strong id="r-br">—</strong></div>
+          <div class="linea" id="l-ajuste" hidden><span id="lbl-ajuste">Recorte por anticipación (aprox.)</span>
+            <strong id="r-ajuste">—</strong></div>
           <div class="linea" id="l-tope" hidden><span>Aplicado tope de pensión máxima</span>
             <strong id="r-tope">—</strong></div>
         </div>
+        <div class="alerta" id="alerta-modalidad" hidden></div>
         <div class="alerta" id="alerta-carencia" hidden>Con menos de 15 años
         cotizados a la edad de jubilación no se genera derecho a pensión
         contributiva.</div>
@@ -213,16 +242,29 @@
         <tr><td>2027 en adelante</td><td>67 años</td><td>65 años</td><td>38 a. y 6 m.</td></tr>
       </table>
 
+      <h2>Jubilación anticipada: voluntaria e involuntaria</h2>
+      <p>Puedes adelantar la jubilación <strong>hasta 2 años</strong> antes de
+      tu edad legal por decisión propia (con 35 años cotizados) o
+      <strong>hasta 4 años</strong> si llegas desde un cese involuntario —
+      despido colectivo u objetivo, entre otros supuestos — con 33 años
+      cotizados. A cambio, la pensión sufre un <strong>recorte permanente</strong>
+      mediante coeficientes que dependen de cuántos meses anticipes y de tu
+      carrera de cotización: en la voluntaria, anticipar los 24 meses completos
+      recorta entre un 13% (carreras muy largas) y un 21%. La calculadora aplica
+      una aproximación de esas tablas — el valor exacto de tu mes concreto está
+      en las tablas oficiales de la Seguridad Social. En la voluntaria, además,
+      no se permite si la pensión resultante queda por debajo de la mínima.</p>
+      <p>El camino inverso también existe: la <strong>jubilación demorada</strong>
+      suma un 4% adicional de pensión por cada año completo que sigas
+      trabajando pasada tu edad legal (o alternativamente un pago único).</p>
+
       <h2>Lo que esta estimación no incluye</h2>
-      <p>Para mantener el cálculo honesto, conviene saber qué queda fuera:
-      la <strong>jubilación anticipada</strong> (voluntaria o involuntaria,
-      con sus coeficientes reductores), la <strong>jubilación demorada</strong>
-      y sus incentivos, las <strong>lagunas de cotización</strong> y su
-      integración, el <strong>complemento de brecha de género</strong>, los
-      regímenes especiales, y la evolución futura de tu salario y de las
-      bases (se asumen constantes). Para un cálculo oficial con tu vida
-      laboral real, usa el simulador de la Seguridad Social (Import@ss) o
-      consulta con un asesor.</p>
+      <p>Las <strong>lagunas de cotización</strong> y su integración, el
+      <strong>complemento de brecha de género</strong>, los regímenes
+      especiales, y la evolución futura de tu salario y de las bases (se
+      asumen constantes). Para un cálculo oficial con tu vida laboral real,
+      usa el simulador de la Seguridad Social (Import@ss) o consulta con un
+      asesor.</p>
 
       <h2>Preguntas frecuentes</h2>
       <div class="faq">
@@ -346,6 +388,61 @@
       / P.base_reguladora.divisor;
 
     let pension = br * pct / 100;
+
+    // modalidad: anticipada (recorte) o demorada (bonus)
+    const mod = $("modalidad") ? $("modalidad").value : "ordinaria";
+    const mesesIn = Math.max(1, parseInt($("meses") ? $("meses").value : 0) || 0);
+    $("c-meses").hidden = (mod === "ordinaria");
+    $("alerta-modalidad").hidden = true;
+    $("l-ajuste").hidden = true;
+    let edadFinalMeses = edadMeses;
+
+    if (mod === "voluntaria" || mod === "involuntaria") {
+      const A = P.anticipada[mod];
+      const meses = Math.min(mesesIn, A.max_meses);
+      $("meses").max = A.max_meses;
+      $("lbl-meses").textContent = "Meses de anticipo (máx. " + A.max_meses + ")";
+      // carencia especifica en la fecha anticipada
+      edadFinalMeses = edadMeses - meses;
+      const cotAnticipada = cotHoy + Math.max(0, edadFinalMeses / 12 - edadHoy);
+      if (cotAnticipada < A.carencia_anios) {
+        $("alerta-modalidad").textContent = "Para la jubilación anticipada "
+          + (mod === "voluntaria" ? "voluntaria se exigen 35" : "involuntaria se exigen 33")
+          + " años cotizados; con tus datos llegarías con "
+          + (Math.round(cotAnticipada * 2) / 2) + ".";
+        $("alerta-modalidad").hidden = false;
+      } else {
+        let recortePct;
+        if (mod === "involuntaria") {
+          recortePct = A.recorte_anual_pct * meses / 12;
+        } else {
+          const t = A.tramos_carrera_anios;
+          const idx = cotAnticipada < t[0] ? 0 : cotAnticipada < t[1] ? 1
+                    : cotAnticipada < t[2] ? 2 : 3;
+          recortePct = A.recorte_24m_por_tramo[idx] * meses / A.max_meses;
+        }
+        pension *= (1 - recortePct / 100);
+        $("lbl-ajuste").textContent = "Recorte por anticipación (aprox.)";
+        $("r-ajuste").textContent = "−" + fmt.format(recortePct) + " %";
+        $("l-ajuste").hidden = false;
+      }
+    } else if (mod === "demorada") {
+      const meses = mesesIn;
+      $("meses").max = 60;
+      $("lbl-meses").textContent = "Meses de demora";
+      edadFinalMeses = edadMeses + meses;
+      const bonus = P.demorada.bonus_anual_pct * Math.floor(meses / 12);
+      pension *= (1 + bonus / 100);
+      $("lbl-ajuste").textContent = "Bonus por demora (+" 
+        + P.demorada.bonus_anual_pct + "%/año completo)";
+      $("r-ajuste").textContent = "+" + fmt.format(bonus) + " %";
+      $("l-ajuste").hidden = false;
+    }
+
+    // refrescar edad/anio mostrados con la modalidad
+    $("r-edad").textContent = edadTexto(edadFinalMeses);
+    $("r-anio").textContent = String(nac + Math.floor(edadFinalMeses / 12));
+
     const topada = pension > P.pension_maxima_mensual;
     if (topada) pension = P.pension_maxima_mensual;
 
@@ -364,7 +461,7 @@
         "<p>No se han podido cargar los parámetros. Recarga la página.</p>";
     });
 
-  for (const id of ["nac", "cot", "sal"])
+  for (const id of ["nac", "cot", "sal", "modalidad", "meses"])
     $(id).addEventListener("input", calc);
 </script>
   <!-- Cloudflare Web Analytics -->

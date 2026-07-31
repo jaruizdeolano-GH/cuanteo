@@ -1,33 +1,61 @@
 {
-  "vigencia": "Parámetros según normativa de Seguridad Social. Bases y topes: últimos valores confirmados (revisar con PGE de cada año). Actualizado: julio 2026.",
-  "edad_regimen_2026": {
-    "nota": "Quien se jubile en 2026",
-    "edad_ordinaria_meses": 802,
-    "edad_reducida_meses": 780,
-    "carencia_para_reducida_anios": 38.25
+ "vigencia": "Parámetros según normativa de Seguridad Social. Bases y topes: últimos valores confirmados (revisar con PGE de cada año). Actualizado: julio 2026.",
+ "edad_regimen_2026": {
+  "nota": "Quien se jubile en 2026",
+  "edad_ordinaria_meses": 802,
+  "edad_reducida_meses": 780,
+  "carencia_para_reducida_anios": 38.25
+ },
+ "edad_regimen_2027": {
+  "nota": "Quien se jubile en 2027 o después (régimen definitivo reforma 2011)",
+  "edad_ordinaria_meses": 804,
+  "edad_reducida_meses": 780,
+  "carencia_para_reducida_anios": 38.5
+ },
+ "carencia_minima_anios": 15,
+ "escala_porcentaje_2027": {
+  "nota": "Escala definitiva desde 2027: 15 años = 50%; meses adicionales",
+  "base_pct": 50,
+  "tramo1_meses": 248,
+  "tramo1_pct_mes": 0.19,
+  "tramo2_meses": 16,
+  "tramo2_pct_mes": 0.18
+ },
+ "base_reguladora": {
+  "nota": "Suma de las bases de los últimos 25 años (300 meses) dividida entre 350",
+  "meses_computados": 300,
+  "divisor": 350
+ },
+ "base_cotizacion_max_mensual": 4909.5,
+ "base_cotizacion_min_mensual": 1381.2,
+ "pension_maxima_mensual": 3267.6,
+ "pagas_anuales": 14,
+ "anticipada": {
+  "nota": "Recortes APROXIMADOS por interpolacion lineal de las tablas mensuales oficiales (Ley 21/2021). El recorte exacto depende del mes concreto y la tabla vigente.",
+  "voluntaria": {
+   "max_meses": 24,
+   "carencia_anios": 35,
+   "recorte_24m_por_tramo": [
+    21,
+    19,
+    17,
+    13
+   ],
+   "tramos_carrera_anios": [
+    38.5,
+    41.5,
+    44.5
+   ],
+   "nota_tramos": "recorte a 24 meses segun carrera: <38,5 / 38,5-41,5 / 41,5-44,5 / >=44,5 anios"
   },
-  "edad_regimen_2027": {
-    "nota": "Quien se jubile en 2027 o después (régimen definitivo reforma 2011)",
-    "edad_ordinaria_meses": 804,
-    "edad_reducida_meses": 780,
-    "carencia_para_reducida_anios": 38.5
-  },
-  "carencia_minima_anios": 15,
-  "escala_porcentaje_2027": {
-    "nota": "Escala definitiva desde 2027: 15 años = 50%; meses adicionales",
-    "base_pct": 50,
-    "tramo1_meses": 248,
-    "tramo1_pct_mes": 0.19,
-    "tramo2_meses": 16,
-    "tramo2_pct_mes": 0.18
-  },
-  "base_reguladora": {
-    "nota": "Suma de las bases de los últimos 25 años (300 meses) dividida entre 350",
-    "meses_computados": 300,
-    "divisor": 350
-  },
-  "base_cotizacion_max_mensual": 4909.5,
-  "base_cotizacion_min_mensual": 1381.2,
-  "pension_maxima_mensual": 3267.6,
-  "pagas_anuales": 14
+  "involuntaria": {
+   "max_meses": 48,
+   "carencia_anios": 33,
+   "recorte_anual_pct": 7.5
+  }
+ },
+ "demorada": {
+  "bonus_anual_pct": 4,
+  "nota": "Opcion de porcentaje adicional; existe alternativa de pago unico no modelada"
+ }
 }
