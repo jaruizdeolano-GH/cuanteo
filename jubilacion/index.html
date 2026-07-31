@@ -164,10 +164,15 @@
             inputmode="numeric">
         </div>
         <div class="campo">
-          <label for="cot">Años cotizados hasta hoy</label>
-          <input type="number" id="cot" value="25" min="0" max="55"
-            step="0.5" inputmode="decimal">
-          <div class="pista">Lo tienes en tu informe de vida laboral</div>
+          <label>Cotizado hasta hoy (años y meses)</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <input type="number" id="cot-a" value="25" min="0" max="55"
+              inputmode="numeric" aria-label="Años cotizados">
+            <input type="number" id="cot-m" value="0" min="0" max="11"
+              inputmode="numeric" aria-label="Meses cotizados adicionales">
+          </div>
+          <div class="pista">Años · meses — tal como aparece en tu informe
+            de vida laboral</div>
         </div>
         <div class="campo">
           <label for="sal">Salario bruto anual (€)</label>
@@ -196,12 +201,14 @@
 
       <div class="resultado" aria-live="polite">
         <div class="res-grande">
-          <div><span>Edad legal de jubilación</span>
+          <div><span>Edad de jubilación estimada</span>
             <strong id="r-edad">—</strong></div>
           <div><span>Pensión mensual estimada (bruta, 14 pagas)</span>
             <strong id="r-pension">—</strong></div>
         </div>
         <div class="res-detalle">
+          <div class="linea"><span>Tu edad legal ordinaria</span>
+            <strong id="r-legal">—</strong></div>
           <div class="linea"><span>Año estimado de jubilación</span>
             <strong id="r-anio">—</strong></div>
           <div class="linea"><span>Años cotizados a esa fecha (estimados)</span>
@@ -254,9 +261,14 @@
       mediante coeficientes que dependen de cuántos meses anticipes y de tu
       carrera de cotización: en la voluntaria, anticipar los 24 meses completos
       recorta entre un 13% (carreras muy largas) y un 21%. La calculadora aplica
-      una aproximación de esas tablas — el valor exacto de tu mes concreto está
-      en las tablas oficiales de la Seguridad Social. En la voluntaria, además,
-      no se permite si la pensión resultante queda por debajo de la mínima.</p>
+      las <strong>tablas mensuales oficiales</strong> de la Seguridad Social
+      (en la involuntaria, los meses 1-6 y 22-23 se aproximan por los valores
+      colindantes publicados). En la voluntaria, además,
+      no se permite si la pensión resultante queda por debajo de la mínima.
+      Y un detalle poco conocido para salarios altos: al anticipar, el
+      <strong>tope de pensión máxima también se reduce</strong> (un 0,50% por
+      trimestre de anticipo), así que ni las carreras al máximo escapan del
+      coste de adelantarse.</p>
       <p>El camino inverso también existe: la <strong>jubilación demorada</strong>
       suma un 4% adicional de pensión por cada año completo que sigas
       trabajando pasada tu edad legal (o alternativamente un pago único).</p>
@@ -336,134 +348,136 @@
     return m ? `${a} años y ${m} m.` : `${a} años`;
   }
 
+  function pctPorCarrera(cotAnios) {
+    const e = P.escala_porcentaje_2027;
+    const mesesExtra = Math.max(0,
+      Math.floor((cotAnios - P.carencia_minima_anios) * 12));
+    return Math.min(100,
+      e.base_pct +
+      Math.min(mesesExtra, e.tramo1_meses) * e.tramo1_pct_mes +
+      Math.max(0, Math.min(mesesExtra - e.tramo1_meses, e.tramo2_meses))
+        * e.tramo2_pct_mes);
+  }
+
   function calc() {
     if (!P) return;
     const nac = parseInt($("nac").value);
-    const cotHoy = parseFloat($("cot").value);
+    const cotHoy = (parseInt($("cot-a").value) || 0)
+      + (parseInt($("cot-m").value) || 0) / 12;
     const sal = parseFloat($("sal").value);
     if (!isFinite(nac) || !isFinite(cotHoy) || !isFinite(sal)) return;
 
     const hoy = new Date().getFullYear();
     const edadHoy = hoy - nac;
 
-    // regimen aplicable segun anio probable de jubilacion (>=2027 casi siempre)
+    // edad legal ordinaria (regimen 2027; transitorio si jubila en 2026)
     const reg67 = P.edad_regimen_2027;
-    // años cotizados que tendria a los 65 (cotizacion continua desde hoy)
     const cotA65 = cotHoy + Math.max(0, 65 - edadHoy);
-    let edadMeses;
-    if (cotA65 >= reg67.carencia_para_reducida_anios) {
-      edadMeses = reg67.edad_reducida_meses;        // 65
-    } else {
-      edadMeses = reg67.edad_ordinaria_meses;       // 67
-    }
-    // si se jubila en 2026, aplicar regimen transitorio de ese año
-    let anioJub = nac + Math.floor(edadMeses / 12);
-    if (anioJub <= 2026) {
+    let edadLegal = (cotA65 >= reg67.carencia_para_reducida_anios)
+      ? reg67.edad_reducida_meses : reg67.edad_ordinaria_meses;
+    if (nac + Math.floor(edadLegal / 12) <= 2026) {
       const r26 = P.edad_regimen_2026;
-      edadMeses = (cotA65 >= r26.carencia_para_reducida_anios)
+      edadLegal = (cotA65 >= r26.carencia_para_reducida_anios)
         ? r26.edad_reducida_meses : r26.edad_ordinaria_meses;
-      anioJub = nac + Math.floor(edadMeses / 12);
     }
 
-    const cotTotal = cotHoy + Math.max(0, edadMeses / 12 - edadHoy);
+    // modalidad -> edad final real de jubilacion
+    const mod = $("modalidad") ? $("modalidad").value : "ordinaria";
+    const mesesIn = Math.max(1, parseInt($("meses") ? $("meses").value : 0) || 0);
+    $("c-meses").hidden = (mod === "ordinaria");
+    $("alerta-modalidad").hidden = true;
+    $("l-ajuste").hidden = true;
 
-    $("r-edad").textContent = edadTexto(edadMeses);
-    $("r-anio").textContent = String(anioJub);
+    let edadFinal = edadLegal, mesesMod = 0;
+    if (mod === "voluntaria" || mod === "involuntaria") {
+      const A = P.anticipada[mod];
+      mesesMod = Math.min(mesesIn, A.max_meses);
+      $("meses").max = A.max_meses;
+      $("lbl-meses").textContent = "Meses de anticipo (máx. " + A.max_meses + ")";
+      edadFinal = edadLegal - mesesMod;
+    } else if (mod === "demorada") {
+      mesesMod = mesesIn;
+      $("meses").max = 60;
+      $("lbl-meses").textContent = "Meses de demora";
+      edadFinal = edadLegal + mesesMod;
+    }
+
+    // cotizacion REAL a la fecha final (el fix: cotizas hasta que te vas)
+    const cotTotal = cotHoy + Math.max(0, edadFinal / 12 - edadHoy);
+
+    $("r-edad").textContent = edadTexto(edadFinal);
+    $("r-legal").textContent = edadTexto(edadLegal);
+    $("r-anio").textContent = String(nac + Math.floor(edadFinal / 12));
     $("r-cot-total").textContent =
       fmt.format(Math.round(cotTotal * 2) / 2).replace(",00", "") + " años";
 
-    // carencia minima
+    // carencias
     const sinDerecho = cotTotal < P.carencia_minima_anios;
+    let sinModalidad = false;
+    if (mod === "voluntaria" || mod === "involuntaria") {
+      const A = P.anticipada[mod];
+      if (cotTotal < A.carencia_anios) {
+        sinModalidad = true;
+        $("alerta-modalidad").textContent = "Para la jubilación anticipada "
+          + (mod === "voluntaria" ? "voluntaria se exigen 35" : "involuntaria se exigen 33")
+          + " años cotizados; con tus datos llegarías con "
+          + (Math.round(cotTotal * 2) / 2) + ".";
+        $("alerta-modalidad").hidden = false;
+      }
+    }
     $("alerta-carencia").hidden = !sinDerecho;
-    if (sinDerecho) {
+    if (sinDerecho || sinModalidad) {
       $("r-pension").textContent = "—";
+      $("r-anual-p").textContent = "—";
       $("r-pct").textContent = "—";
       $("r-br").textContent = "—";
       $("l-tope").hidden = true;
       return;
     }
 
-    // porcentaje por años cotizados (escala 2027)
-    const e = P.escala_porcentaje_2027;
-    const mesesExtra = Math.max(0,
-      Math.floor((cotTotal - P.carencia_minima_anios) * 12));
-    const pct = Math.min(100,
-      e.base_pct +
-      Math.min(mesesExtra, e.tramo1_meses) * e.tramo1_pct_mes +
-      Math.max(0, Math.min(mesesExtra - e.tramo1_meses, e.tramo2_meses))
-        * e.tramo2_pct_mes);
-
-    // base reguladora: base mensual (salario/12) topada, x 300/350
+    // porcentaje con la carrera real y base reguladora
+    const pct = pctPorCarrera(cotTotal);
     const baseMensual = Math.min(
       Math.max(sal / 12, 0), P.base_cotizacion_max_mensual);
     const br = baseMensual * P.base_reguladora.meses_computados
       / P.base_reguladora.divisor;
-
     let pension = br * pct / 100;
 
-    // modalidad: anticipada (recorte) o demorada (bonus)
-    const mod = $("modalidad") ? $("modalidad").value : "ordinaria";
-    const mesesIn = Math.max(1, parseInt($("meses") ? $("meses").value : 0) || 0);
-    $("c-meses").hidden = (mod === "ordinaria");
-    $("alerta-modalidad").hidden = true;
-    $("l-ajuste").hidden = true;
-    let edadFinalMeses = edadMeses;
-
+    // recorte / bonus
+    let topeAplicable = P.pension_maxima_mensual;
     if (mod === "voluntaria" || mod === "involuntaria") {
-      const A = P.anticipada[mod];
-      const meses = Math.min(mesesIn, A.max_meses);
-      $("meses").max = A.max_meses;
-      $("lbl-meses").textContent = "Meses de anticipo (máx. " + A.max_meses + ")";
-      // carencia especifica en la fecha anticipada
-      edadFinalMeses = edadMeses - meses;
-      const cotAnticipada = cotHoy + Math.max(0, edadFinalMeses / 12 - edadHoy);
-      if (cotAnticipada < A.carencia_anios) {
-        $("alerta-modalidad").textContent = "Para la jubilación anticipada "
-          + (mod === "voluntaria" ? "voluntaria se exigen 35" : "involuntaria se exigen 33")
-          + " años cotizados; con tus datos llegarías con "
-          + (Math.round(cotAnticipada * 2) / 2) + ".";
-        $("alerta-modalidad").hidden = false;
-      } else {
-        let recortePct;
-        if (mod === "involuntaria") {
-          recortePct = A.recorte_anual_pct * meses / 12;
-        } else {
-          const t = A.tramos_carrera_anios;
-          const idx = cotAnticipada < t[0] ? 0 : cotAnticipada < t[1] ? 1
-                    : cotAnticipada < t[2] ? 2 : 3;
-          recortePct = A.recorte_24m_por_tramo[idx] * meses / A.max_meses;
-        }
-        pension *= (1 - recortePct / 100);
-        $("lbl-ajuste").textContent = "Recorte por anticipación (aprox.)";
-        $("r-ajuste").textContent = "−" + fmt.format(recortePct) + " %";
-        $("l-ajuste").hidden = false;
-      }
+      const t = P.anticipada.tramos_carrera_anios;
+      const idx = cotTotal < t[0] ? 0 : cotTotal < t[1] ? 1
+                : cotTotal < t[2] ? 2 : 3;
+      const recortePct =
+        P.anticipada[mod].tabla[String(mesesMod)][idx];
+      pension *= (1 - recortePct / 100);
+      // art. 210.3 LGSS: el tope tambien se reduce un 0,50% por trimestre
+      topeAplicable = P.pension_maxima_mensual
+        * (1 - 0.005 * Math.ceil(mesesMod / 3));
+      $("lbl-ajuste").textContent = "Recorte por anticipación (aprox.)";
+      $("r-ajuste").textContent = "−" + fmt.format(recortePct) + " %";
+      $("l-ajuste").hidden = false;
     } else if (mod === "demorada") {
-      const meses = mesesIn;
-      $("meses").max = 60;
-      $("lbl-meses").textContent = "Meses de demora";
-      edadFinalMeses = edadMeses + meses;
-      const bonus = P.demorada.bonus_anual_pct * Math.floor(meses / 12);
+      const bonus = P.demorada.bonus_anual_pct * Math.floor(mesesMod / 12);
       pension *= (1 + bonus / 100);
-      $("lbl-ajuste").textContent = "Bonus por demora (+" 
+      $("lbl-ajuste").textContent = "Bonus por demora (+"
         + P.demorada.bonus_anual_pct + "%/año completo)";
       $("r-ajuste").textContent = "+" + fmt.format(bonus) + " %";
       $("l-ajuste").hidden = false;
     }
 
-    // refrescar edad/anio mostrados con la modalidad
-    $("r-edad").textContent = edadTexto(edadFinalMeses);
-    $("r-anio").textContent = String(nac + Math.floor(edadFinalMeses / 12));
-
-    const topada = pension > P.pension_maxima_mensual;
-    if (topada) pension = P.pension_maxima_mensual;
+    const topada = pension > topeAplicable;
+    if (topada) pension = topeAplicable;
 
     $("r-pct").textContent = fmt.format(pct).replace(",00", "") + " %";
     $("r-br").textContent = fmt.format(br) + " €/mes";
     $("r-pension").textContent = fmt.format(pension) + " €";
     $("r-anual-p").textContent = fmt.format(pension * P.pagas_anuales) + " €";
     $("l-tope").hidden = !topada;
-    $("r-tope").textContent = fmt.format(P.pension_maxima_mensual) + " €";
+    $("r-tope").textContent = fmt.format(topeAplicable) + " €"
+      + ((mod === "voluntaria" || mod === "involuntaria")
+         ? " (tope reducido por anticipación)" : "");
   }
 
   fetch("params.json")
@@ -474,7 +488,7 @@
         "<p>No se han podido cargar los parámetros. Recarga la página.</p>";
     });
 
-  for (const id of ["nac", "cot", "sal", "modalidad", "meses"])
+  for (const id of ["nac", "cot-a", "cot-m", "sal", "modalidad", "meses"])
     $(id).addEventListener("input", calc);
 </script>
   <!-- Cloudflare Web Analytics -->
