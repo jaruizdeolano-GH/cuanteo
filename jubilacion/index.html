@@ -452,8 +452,9 @@
     $("r-edad").textContent = edadTexto(edadFinal);
     $("r-legal").textContent = edadTexto(edadLegal);
     $("r-anio").textContent = fechaJub;
-    $("r-cot-total").textContent =
-      fmt.format(Math.round(cotTotal * 2) / 2).replace(",00", "") + " años";
+    const cotMeses = Math.round(cotTotal * 12);
+    $("r-cot-total").textContent = Math.floor(cotMeses / 12) + " años"
+      + (cotMeses % 12 ? " y " + (cotMeses % 12) + " m." : "");
 
     // carencias
     const sinDerecho = cotTotal < P.carencia_minima_anios;
@@ -462,10 +463,12 @@
       const A = P.anticipada[mod];
       if (cotTotal < A.carencia_anios) {
         sinModalidad = true;
+        const cm = Math.round(cotTotal * 12);
         $("alerta-modalidad").textContent = "Para la jubilación anticipada "
           + (mod === "voluntaria" ? "voluntaria se exigen 35" : "involuntaria se exigen 33")
           + " años cotizados; con tus datos llegarías con "
-          + (Math.round(cotTotal * 2) / 2) + ".";
+          + Math.floor(cm / 12) + " años"
+          + (cm % 12 ? " y " + (cm % 12) + " meses" : "") + ".";
         $("alerta-modalidad").hidden = false;
       }
     }
