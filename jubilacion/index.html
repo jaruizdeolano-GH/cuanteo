@@ -110,6 +110,11 @@
     padding:4px 0;font-size:.9rem;color:var(--tinta-suave)}
   .res-detalle .linea[hidden]{display:none}
   .res-detalle .linea strong{font-variant-numeric:tabular-nums;color:var(--tinta)}
+  .res-detalle .linea.destacada{border-top:1px solid var(--linea);
+    margin-top:6px;padding-top:10px}
+  .res-detalle .linea.destacada span{font-weight:700;color:var(--tinta)}
+  .res-detalle .linea.destacada strong{font-family:'Archivo';font-weight:800;
+    font-size:1.2rem;color:var(--verde)}
   .alerta{margin-top:12px;font-size:.83rem;color:#8a5a00;background:#FCF3DC;
     border-radius:8px;padding:10px 14px}
   .alerta[hidden]{display:none}
@@ -228,20 +233,20 @@
             <strong id="r-anio">—</strong></div>
           <div class="linea"><span>Años cotizados a esa fecha (estimados)</span>
             <strong id="r-cot-total">—</strong></div>
-          <div class="linea"><span>Porcentaje de la base reguladora</span>
+          <div class="linea"><span id="lbl-salmes">Salario mensual considerado (bruto)</span>
+            <strong id="r-salmes">—</strong></div>
+          <div class="linea"><span>Porcentaje por años cotizados</span>
             <strong id="r-pct">—</strong></div>
-          <div class="linea" id="l-basetope" hidden><span>Base de cotización topada al máximo (el exceso no cotiza ni genera pensión)</span>
-            <strong id="r-basetope">—</strong></div>
-          <div class="linea"><span>Base reguladora estimada (bruta)</span>
-            <strong id="r-br">—</strong></div>
-          <div class="linea"><span>Pensión anual estimada (bruta, € de hoy)</span>
-            <strong id="r-anual-p">—</strong></div>
-          <div class="linea" id="l-nominal" hidden><span id="lbl-nominal">≈ En euros del año de jubilación</span>
-            <strong id="r-nominal">—</strong></div>
-          <div class="linea" id="l-ajuste" hidden><span id="lbl-ajuste">Recorte por anticipación (aprox.)</span>
+          <div class="linea" id="l-ajuste" hidden><span id="lbl-ajuste">Recorte por anticipación</span>
             <strong id="r-ajuste">—</strong></div>
           <div class="linea" id="l-tope" hidden><span>Aplicado tope de pensión máxima</span>
             <strong id="r-tope">—</strong></div>
+          <div class="linea destacada"><span>Pensión mensual (bruta, 14 pagas)</span>
+            <strong id="r-mensual">—</strong></div>
+          <div class="linea" id="l-nominal" hidden><span id="lbl-nominal">≈ En euros del año de jubilación</span>
+            <strong id="r-nominal">—</strong></div>
+          <div class="linea"><span>Pensión anual (bruta, € de hoy)</span>
+            <strong id="r-anual-p">—</strong></div>
         </div>
         <div class="alerta" id="alerta-modalidad" hidden></div>
         <div class="alerta" id="alerta-carencia" hidden>Con menos de 15 años
@@ -467,10 +472,12 @@
     $("alerta-carencia").hidden = !sinDerecho;
     if (sinDerecho || sinModalidad) {
       $("r-pension").textContent = "—";
+      $("r-mensual").textContent = "—";
       $("r-anual-p").textContent = "—";
       $("r-pct").textContent = "—";
-      $("r-br").textContent = "—";
+      $("r-salmes").textContent = "—";
       $("l-tope").hidden = true;
+      $("l-nominal").hidden = true;
       return;
     }
 
@@ -479,9 +486,10 @@
     const baseMensual = Math.min(
       Math.max(sal / 12, 0), P.base_cotizacion_max_mensual);
     const baseTopada = sal / 12 > P.base_cotizacion_max_mensual;
-    $("l-basetope").hidden = !baseTopada;
-    if (baseTopada) $("r-basetope").textContent =
-      fmt.format(P.base_cotizacion_max_mensual) + " €/mes";
+    $("lbl-salmes").textContent = baseTopada
+      ? "Salario mensual considerado (topado a la base máxima de cotización)"
+      : "Salario mensual considerado (bruto)";
+    $("r-salmes").textContent = fmt.format(baseMensual) + " €/mes";
     const br = baseMensual * P.base_reguladora.meses_computados
       / P.base_reguladora.divisor;
     let pension = br * pct / 100;
@@ -514,8 +522,8 @@
     if (topada) pension = topeAplicable;
 
     $("r-pct").textContent = fmt.format(pct).replace(",00", "") + " %";
-    $("r-br").textContent = fmt.format(br) + " €/mes";
     $("r-pension").textContent = fmt.format(pension) + " €";
+    $("r-mensual").textContent = fmt.format(pension) + " €";
     $("r-anual-p").textContent = fmt.format(pension * P.pagas_anuales) + " €";
     $("l-tope").hidden = !topada;
     $("r-tope").textContent = fmt.format(topeAplicable) + " €"
