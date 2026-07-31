@@ -159,9 +159,19 @@
     <div class="calc">
       <div class="fila">
         <div class="campo">
-          <label for="nac">Año de nacimiento</label>
-          <input type="number" id="nac" value="1975" min="1940" max="2010"
-            inputmode="numeric">
+          <label>Fecha de nacimiento (mes y año)</label>
+          <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:8px">
+            <select id="nac-m" aria-label="Mes de nacimiento">
+              <option value="1">enero</option><option value="2">febrero</option>
+              <option value="3">marzo</option><option value="4">abril</option>
+              <option value="5">mayo</option><option value="6" selected>junio</option>
+              <option value="7">julio</option><option value="8">agosto</option>
+              <option value="9">septiembre</option><option value="10">octubre</option>
+              <option value="11">noviembre</option><option value="12">diciembre</option>
+            </select>
+            <input type="number" id="nac-a" value="1975" min="1940" max="2010"
+              inputmode="numeric" aria-label="Año de nacimiento">
+          </div>
         </div>
         <div class="campo">
           <label>Cotizado hasta hoy (años y meses)</label>
@@ -182,7 +192,7 @@
         </div>
       </div>
 
-      <div class="fila" style="grid-template-columns:1.4fr .8fr">
+      <div class="fila" style="grid-template-columns:1.3fr .7fr .6fr">
         <div class="campo">
           <label for="modalidad">¿Cómo llegarías a la jubilación?</label>
           <select id="modalidad">
@@ -197,28 +207,37 @@
           <input type="number" id="meses" value="24" min="1" max="24"
             inputmode="numeric">
         </div>
+        <div class="campo">
+          <label for="ipc">IPC medio (%)</label>
+          <input type="number" id="ipc" value="2" min="0" max="10" step="0.5"
+            inputmode="decimal">
+        </div>
       </div>
 
       <div class="resultado" aria-live="polite">
         <div class="res-grande">
           <div><span>Edad de jubilación estimada</span>
             <strong id="r-edad">—</strong></div>
-          <div><span>Pensión mensual estimada (bruta, 14 pagas)</span>
+          <div><span>Pensión mensual estimada (bruta, 14 pagas, € de hoy)</span>
             <strong id="r-pension">—</strong></div>
         </div>
         <div class="res-detalle">
           <div class="linea"><span>Tu edad legal ordinaria</span>
             <strong id="r-legal">—</strong></div>
-          <div class="linea"><span>Año estimado de jubilación</span>
+          <div class="linea"><span>Fecha estimada de jubilación</span>
             <strong id="r-anio">—</strong></div>
           <div class="linea"><span>Años cotizados a esa fecha (estimados)</span>
             <strong id="r-cot-total">—</strong></div>
           <div class="linea"><span>Porcentaje de la base reguladora</span>
             <strong id="r-pct">—</strong></div>
+          <div class="linea" id="l-basetope" hidden><span>Base de cotización topada al máximo (el exceso no cotiza ni genera pensión)</span>
+            <strong id="r-basetope">—</strong></div>
           <div class="linea"><span>Base reguladora estimada (bruta)</span>
             <strong id="r-br">—</strong></div>
-          <div class="linea"><span>Pensión anual estimada (bruta, 14 pagas)</span>
+          <div class="linea"><span>Pensión anual estimada (bruta, € de hoy)</span>
             <strong id="r-anual-p">—</strong></div>
+          <div class="linea" id="l-nominal" hidden><span id="lbl-nominal">≈ En euros del año de jubilación</span>
+            <strong id="r-nominal">—</strong></div>
           <div class="linea" id="l-ajuste" hidden><span id="lbl-ajuste">Recorte por anticipación (aprox.)</span>
             <strong id="r-ajuste">—</strong></div>
           <div class="linea" id="l-tope" hidden><span>Aplicado tope de pensión máxima</span>
@@ -272,6 +291,17 @@
       <p>El camino inverso también existe: la <strong>jubilación demorada</strong>
       suma un 4% adicional de pensión por cada año completo que sigas
       trabajando pasada tu edad legal (o alternativamente un pago único).</p>
+
+      <h2>¿Y la inflación? Todo está en euros de hoy</h2>
+      <p>El resultado principal se expresa en <strong>euros de hoy</strong>:
+      como el salario se asume constante, la cifra representa tu poder
+      adquisitivo actual — la pregunta útil («¿me llegaría para vivir como
+      ahora?»). La línea «en euros del año de jubilación» traduce ese mismo
+      poder adquisitivo a los precios futuros con el IPC medio que elijas —
+      es un número mayor, pero compra lo mismo. Y una garantía legal a tu
+      favor: una vez reconocida, la pensión se <strong>revaloriza cada año
+      con el IPC</strong>, de modo que no pierde poder adquisitivo con el
+      tiempo.</p>
 
       <h2>Lo que esta estimación no incluye</h2>
       <p>Las <strong>lagunas de cotización</strong> y su integración, el
@@ -361,21 +391,23 @@
 
   function calc() {
     if (!P) return;
-    const nac = parseInt($("nac").value);
+    const nacA = parseInt($("nac-a").value);
+    const nacM = parseInt($("nac-m").value);
     const cotHoy = (parseInt($("cot-a").value) || 0)
       + (parseInt($("cot-m").value) || 0) / 12;
     const sal = parseFloat($("sal").value);
-    if (!isFinite(nac) || !isFinite(cotHoy) || !isFinite(sal)) return;
+    if (!isFinite(nacA) || !isFinite(cotHoy) || !isFinite(sal)) return;
 
-    const hoy = new Date().getFullYear();
-    const edadHoy = hoy - nac;
+    const ahora = new Date();
+    const edadHoyM = (ahora.getFullYear() * 12 + ahora.getMonth() + 1)
+      - (nacA * 12 + nacM);           // edad actual en meses
 
     // edad legal ordinaria (regimen 2027; transitorio si jubila en 2026)
     const reg67 = P.edad_regimen_2027;
-    const cotA65 = cotHoy + Math.max(0, 65 - edadHoy);
+    const cotA65 = cotHoy + Math.max(0, (780 - edadHoyM) / 12);
     let edadLegal = (cotA65 >= reg67.carencia_para_reducida_anios)
       ? reg67.edad_reducida_meses : reg67.edad_ordinaria_meses;
-    if (nac + Math.floor(edadLegal / 12) <= 2026) {
+    if (nacA + Math.floor(edadLegal / 12) <= 2026) {
       const r26 = P.edad_regimen_2026;
       edadLegal = (cotA65 >= r26.carencia_para_reducida_anios)
         ? r26.edad_reducida_meses : r26.edad_ordinaria_meses;
@@ -402,12 +434,19 @@
       edadFinal = edadLegal + mesesMod;
     }
 
-    // cotizacion REAL a la fecha final (el fix: cotizas hasta que te vas)
-    const cotTotal = cotHoy + Math.max(0, edadFinal / 12 - edadHoy);
+    // cotizacion REAL a la fecha final (cotizas hasta que te vas)
+    const mesesRestantes = Math.max(0, edadFinal - edadHoyM);
+    const cotTotal = cotHoy + mesesRestantes / 12;
+
+    // fecha de jubilacion: nacimiento + edad final (en meses)
+    const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio",
+      "agosto","septiembre","octubre","noviembre","diciembre"];
+    const totalM = (nacA * 12 + nacM - 1) + edadFinal;
+    const fechaJub = MESES[totalM % 12] + " de " + Math.floor(totalM / 12);
 
     $("r-edad").textContent = edadTexto(edadFinal);
     $("r-legal").textContent = edadTexto(edadLegal);
-    $("r-anio").textContent = String(nac + Math.floor(edadFinal / 12));
+    $("r-anio").textContent = fechaJub;
     $("r-cot-total").textContent =
       fmt.format(Math.round(cotTotal * 2) / 2).replace(",00", "") + " años";
 
@@ -439,6 +478,10 @@
     const pct = pctPorCarrera(cotTotal);
     const baseMensual = Math.min(
       Math.max(sal / 12, 0), P.base_cotizacion_max_mensual);
+    const baseTopada = sal / 12 > P.base_cotizacion_max_mensual;
+    $("l-basetope").hidden = !baseTopada;
+    if (baseTopada) $("r-basetope").textContent =
+      fmt.format(P.base_cotizacion_max_mensual) + " €/mes";
     const br = baseMensual * P.base_reguladora.meses_computados
       / P.base_reguladora.divisor;
     let pension = br * pct / 100;
@@ -478,6 +521,19 @@
     $("r-tope").textContent = fmt.format(topeAplicable) + " €"
       + ((mod === "voluntaria" || mod === "involuntaria")
          ? " (tope reducido por anticipación)" : "");
+
+    // estimacion nominal al año de jubilacion (IPC editable)
+    const ipc = parseFloat($("ipc").value);
+    const anios = mesesRestantes / 12;
+    if (isFinite(ipc) && ipc > 0 && anios > 0.5) {
+      const factor = Math.pow(1 + ipc / 100, anios);
+      $("lbl-nominal").textContent = "≈ En euros de " + Math.floor(totalM / 12)
+        + " (IPC " + fmt.format(ipc).replace(",00", "") + "%/año)";
+      $("r-nominal").textContent = fmt.format(pension * factor) + " €/mes";
+      $("l-nominal").hidden = false;
+    } else {
+      $("l-nominal").hidden = true;
+    }
   }
 
   fetch("params.json")
@@ -488,7 +544,8 @@
         "<p>No se han podido cargar los parámetros. Recarga la página.</p>";
     });
 
-  for (const id of ["nac", "cot-a", "cot-m", "sal", "modalidad", "meses"])
+  for (const id of ["nac-a", "nac-m", "cot-a", "cot-m", "sal", "modalidad",
+                    "meses", "ipc"])
     $(id).addEventListener("input", calc);
 </script>
   <!-- Cloudflare Web Analytics -->
