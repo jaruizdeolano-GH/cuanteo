@@ -536,7 +536,9 @@
     if (isFinite(ipc) && ipc > 0 && anios > 0.5) {
       const factor = Math.pow(1 + ipc / 100, anios);
       $("lbl-nominal").textContent = "≈ En euros de " + Math.floor(totalM / 12)
-        + " (IPC " + fmt.format(ipc).replace(",00", "") + "%/año)";
+        + " (IPC " + fmt.format(ipc).replace(",00", "") + "%/año"
+        + (topada ? "; el tope máximo también se actualiza cada año" : "")
+        + ")";
       $("r-nominal").textContent = fmt.format(pension * factor) + " €/mes";
       $("l-nominal").hidden = false;
     } else {

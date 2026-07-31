@@ -1,5 +1,5 @@
 {
- "vigencia": "Parámetros según normativa de Seguridad Social. Bases y topes: últimos valores confirmados (revisar con PGE de cada año). Actualizado: julio 2026.",
+ "vigencia": "Valores 2026: pension maxima 3.359,60 EUR/mes (RD 39/2026), base maxima de cotizacion 5.101,20 EUR/mes (Orden PJC/297/2026). Tablas de coeficientes Ley 21/2021. REVISAR CADA ENERO (revalorizacion + orden de cotizacion).",
  "edad_regimen_2026": {
   "nota": "Quien se jubile en 2026",
   "edad_ordinaria_meses": 802,
@@ -26,9 +26,9 @@
   "meses_computados": 300,
   "divisor": 350
  },
- "base_cotizacion_max_mensual": 4909.5,
+ "base_cotizacion_max_mensual": 5101.2,
  "base_cotizacion_min_mensual": 1381.2,
- "pension_maxima_mensual": 3267.6,
+ "pension_maxima_mensual": 3359.6,
  "pagas_anuales": 14,
  "anticipada": {
   "fuente": "Voluntaria: tabla mensual oficial seg-social.es (Ley 21/2021). Involuntaria: meses 7-21 identicos a voluntaria (fuentes oficiales), anclas 12/24/36/48 oficiales, meses 1-6 cota superior (voluntaria) y 22-23 interpolados.",

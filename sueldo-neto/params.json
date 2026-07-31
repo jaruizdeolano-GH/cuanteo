@@ -1,9 +1,9 @@
 {
- "vigencia": "Escala de retenciones (art. 101 LIRPF, uniforme en territorio comun) y cotizaciones segun ultimos valores publicados. No valida para Pais Vasco y Navarra (regimen foral). Actualizado: julio 2026. REVISAR CADA ENERO.",
+ "vigencia": "Escala de retenciones art. 101 LIRPF (territorio comun; no valida para Pais Vasco/Navarra). Cotizaciones 2026 con base maxima 5.101,20 EUR/mes (Orden PJC/297/2026) y MEI 0,15% trabajador. REVISAR CADA ENERO.",
  "cotizacion_trabajador": {
   "nota": "Contingencias comunes 4,70 + desempleo 1,55 + formacion 0,10 + MEI 0,15",
   "tipo_pct": 6.5,
-  "base_max_mensual": 4909.5,
+  "base_max_mensual": 5101.2,
   "base_min_mensual": 1381.2
  },
  "gastos_deducibles_otros": 2000,
