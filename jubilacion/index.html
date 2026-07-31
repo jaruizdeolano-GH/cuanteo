@@ -90,10 +90,11 @@
   .fila{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:18px}
   .campo label{display:block;font-size:.8rem;font-weight:600;
     color:var(--tinta-suave);margin-bottom:5px}
-  .campo input{width:100%;padding:12px;font-size:1.05rem;font-family:inherit;
-    border:1px solid var(--linea);border-radius:9px;background:var(--papel)}
-  .campo input:focus{outline:2px solid var(--ambar);outline-offset:1px;
-    border-color:var(--ambar)}
+  .campo input,.campo select{width:100%;padding:12px;font-size:1.02rem;
+    font-family:inherit;color:var(--tinta);border:1px solid var(--linea);
+    border-radius:9px;background:var(--papel)}
+  .campo input:focus,.campo select:focus{outline:2px solid var(--ambar);
+    outline-offset:1px;border-color:var(--ambar)}
   .campo .pista{font-size:.72rem;color:var(--tinta-suave);margin-top:4px}
 
   .resultado{background:var(--papel);border:1px dashed var(--linea);
@@ -197,7 +198,7 @@
         <div class="res-grande">
           <div><span>Edad legal de jubilación</span>
             <strong id="r-edad">—</strong></div>
-          <div><span>Pensión mensual estimada (14 pagas)</span>
+          <div><span>Pensión mensual estimada (bruta, 14 pagas)</span>
             <strong id="r-pension">—</strong></div>
         </div>
         <div class="res-detalle">
@@ -207,8 +208,10 @@
             <strong id="r-cot-total">—</strong></div>
           <div class="linea"><span>Porcentaje de la base reguladora</span>
             <strong id="r-pct">—</strong></div>
-          <div class="linea"><span>Base reguladora estimada</span>
+          <div class="linea"><span>Base reguladora estimada (bruta)</span>
             <strong id="r-br">—</strong></div>
+          <div class="linea"><span>Pensión anual estimada (bruta, 14 pagas)</span>
+            <strong id="r-anual-p">—</strong></div>
           <div class="linea" id="l-ajuste" hidden><span id="lbl-ajuste">Recorte por anticipación (aprox.)</span>
             <strong id="r-ajuste">—</strong></div>
           <div class="linea" id="l-tope" hidden><span>Aplicado tope de pensión máxima</span>
@@ -286,6 +289,15 @@
           <p>Existe la jubilación anticipada voluntaria hasta 24 meses antes
           de tu edad legal, con coeficientes reductores que disminuyen la
           pensión de forma permanente. Esta calculadora no la contempla.</p>
+        </details>
+        <details>
+          <summary>¿La pensión que muestra es bruta o neta?</summary>
+          <p>Bruta, en 14 pagas. Las pensiones tributan en el IRPF como
+          rendimientos del trabajo: la neta depende de tu retención (según
+          importe y circunstancias — las pensiones bajas suelen tener
+          retención cero o mínima). Puedes estimar el efecto con nuestra
+          <a href="/sueldo-neto/">calculadora de sueldo neto</a> como
+          aproximación.</p>
         </details>
         <details>
           <summary>¿Esta estimación es oficial?</summary>
@@ -449,6 +461,7 @@
     $("r-pct").textContent = fmt.format(pct).replace(",00", "") + " %";
     $("r-br").textContent = fmt.format(br) + " €/mes";
     $("r-pension").textContent = fmt.format(pension) + " €";
+    $("r-anual-p").textContent = fmt.format(pension * P.pagas_anuales) + " €";
     $("l-tope").hidden = !topada;
     $("r-tope").textContent = fmt.format(P.pension_maxima_mensual) + " €";
   }
